@@ -67,7 +67,7 @@ public class Player : MonoBehaviour
 
         }
 
-        else if (Input.GetButtonDown("Jump"))
+        else if (Input.GetButtonDown("Jump") && isGrounded)
         {
             direction = Vector2.up * jumpForce;
 
