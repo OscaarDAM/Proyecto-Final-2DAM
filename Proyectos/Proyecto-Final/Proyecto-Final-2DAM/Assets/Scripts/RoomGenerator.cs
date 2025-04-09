@@ -20,22 +20,24 @@ public class RoomGenerator : MonoBehaviour
 
             int w = Random.Range(roomMinSize, roomMaxSize);
             int h = Random.Range(roomMinSize, roomMaxSize);
-            int x = Random.Range(1, width - w - 1);
-            int y = Random.Range(1, height - h - 1);
+            int x = Random.Range(1, width - w - 2);
+            int y = Random.Range(1, height - h - 2);
 
-            if (!IsAreaEmpty(mapData, x, y, w, h))
+            if (!IsAreaEmpty(mapData, x - 1, y - 1, w + 2, h + 2))
                 continue;
 
-            // Crear habitación
-            for (int dx = x; dx < x + w; dx++)
+            // Crear habitación con borde de muro
+            for (int dx = x - 1; dx <= x + w; dx++)
             {
-                for (int dy = y; dy < y + h; dy++)
+                for (int dy = y - 1; dy <= y + h; dy++)
                 {
-                    mapData[dx, dy] = 0;
+                    if (dx == x - 1 || dx == x + w || dy == y - 1 || dy == y + h)
+                        mapData[dx, dy] = 1; // muro
+                    else
+                        mapData[dx, dy] = 0; // suelo
                 }
             }
 
-            // Guardar el centro de la habitación
             roomCenters.Add(new Vector2Int(x + w / 2, y + h / 2));
         }
 
@@ -48,14 +50,14 @@ public class RoomGenerator : MonoBehaviour
 
     bool IsAreaEmpty(int[,] mapData, int x, int y, int w, int h)
     {
-        for (int dx = x - 1; dx <= x + w; dx++)
+        for (int dx = x; dx < x + w; dx++)
         {
-            for (int dy = y - 1; dy <= y + h; dy++)
+            for (int dy = y; dy < y + h; dy++)
             {
                 if (dx < 0 || dy < 0 || dx >= mapData.GetLength(0) || dy >= mapData.GetLength(1))
                     return false;
 
-                if (mapData[dx, dy] == 0)
+                if (mapData[dx, dy] != -1)
                     return false;
             }
         }
@@ -83,8 +85,17 @@ public class RoomGenerator : MonoBehaviour
     {
         for (int x = Mathf.Min(x1, x2); x <= Mathf.Max(x1, x2); x++)
         {
-            if (x >= 0 && x < mapData.GetLength(0) && y >= 0 && y < mapData.GetLength(1))
-                mapData[x, y] = 0;
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                int yy = y + dy;
+                if (x >= 0 && x < mapData.GetLength(0) && yy >= 0 && yy < mapData.GetLength(1))
+                {
+                    if (dy == 0)
+                        mapData[x, yy] = 0; // suelo
+                    else if (mapData[x, yy] == -1)
+                        mapData[x, yy] = 1; // borde
+                }
+            }
         }
     }
 
@@ -92,8 +103,17 @@ public class RoomGenerator : MonoBehaviour
     {
         for (int y = Mathf.Min(y1, y2); y <= Mathf.Max(y1, y2); y++)
         {
-            if (x >= 0 && x < mapData.GetLength(0) && y >= 0 && y < mapData.GetLength(1))
-                mapData[x, y] = 0;
+            for (int dx = -1; dx <= 1; dx++)
+            {
+                int xx = x + dx;
+                if (xx >= 0 && xx < mapData.GetLength(0) && y >= 0 && y < mapData.GetLength(1))
+                {
+                    if (dx == 0)
+                        mapData[xx, y] = 0; // suelo
+                    else if (mapData[xx, y] == -1)
+                        mapData[xx, y] = 1; // borde
+                }
+            }
         }
     }
 }
