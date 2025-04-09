@@ -19,7 +19,11 @@ public class RoomGenerator : MonoBehaviour
             attempts++;
 
             int w = Random.Range(roomMinSize, roomMaxSize);
+            if (w % 2 == 0) w++; // Asegurarse de que el ancho sea impar ( en el caso de querer hacer par se debe quitar )
+
             int h = Random.Range(roomMinSize, roomMaxSize);
+            if (h % 2 == 0) h++; // Asegurarse de que la altura sea impar ( en el caso de querer hacer par se debe quitar )
+
             int x = Random.Range(1, width - w - 2);
             int y = Random.Range(1, height - h - 2);
 
