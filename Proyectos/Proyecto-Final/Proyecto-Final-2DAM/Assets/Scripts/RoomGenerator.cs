@@ -11,20 +11,27 @@ public class RoomGenerator : MonoBehaviour
     public void GenerateRooms(int[,] mapData, int width, int height)
     {
         List<Vector2Int> roomCenters = new List<Vector2Int>();
+        int attempts = 0;
+        int maxAttempts = roomCount * 5;
 
-        for (int i = 0; i < roomCount; i++)
+        while (roomCenters.Count < roomCount && attempts < maxAttempts)
         {
+            attempts++;
+
             int w = Random.Range(roomMinSize, roomMaxSize);
             int h = Random.Range(roomMinSize, roomMaxSize);
             int x = Random.Range(1, width - w - 1);
             int y = Random.Range(1, height - h - 1);
 
-            // Crear la habitación
+            if (!IsAreaEmpty(mapData, x, y, w, h))
+                continue;
+
+            // Crear habitación
             for (int dx = x; dx < x + w; dx++)
             {
                 for (int dy = y; dy < y + h; dy++)
                 {
-                    mapData[dx, dy] = 0; // Suelo
+                    mapData[dx, dy] = 0;
                 }
             }
 
@@ -32,11 +39,27 @@ public class RoomGenerator : MonoBehaviour
             roomCenters.Add(new Vector2Int(x + w / 2, y + h / 2));
         }
 
-        // Conectar habitaciones usando pasillos
+        // Conectar habitaciones con pasillos
         for (int i = 1; i < roomCenters.Count; i++)
         {
             ConnectRooms(mapData, roomCenters[i - 1], roomCenters[i]);
         }
+    }
+
+    bool IsAreaEmpty(int[,] mapData, int x, int y, int w, int h)
+    {
+        for (int dx = x - 1; dx <= x + w; dx++)
+        {
+            for (int dy = y - 1; dy <= y + h; dy++)
+            {
+                if (dx < 0 || dy < 0 || dx >= mapData.GetLength(0) || dy >= mapData.GetLength(1))
+                    return false;
+
+                if (mapData[dx, dy] == 0)
+                    return false;
+            }
+        }
+        return true;
     }
 
     void ConnectRooms(int[,] mapData, Vector2Int centerA, Vector2Int centerB)
@@ -44,7 +67,6 @@ public class RoomGenerator : MonoBehaviour
         int x1 = centerA.x, y1 = centerA.y;
         int x2 = centerB.x, y2 = centerB.y;
 
-        // Pasillo en forma de L
         if (Random.value < 0.5f)
         {
             CreateHorizontalTunnel(mapData, x1, x2, y1);
@@ -61,7 +83,8 @@ public class RoomGenerator : MonoBehaviour
     {
         for (int x = Mathf.Min(x1, x2); x <= Mathf.Max(x1, x2); x++)
         {
-            mapData[x, y] = 0;
+            if (x >= 0 && x < mapData.GetLength(0) && y >= 0 && y < mapData.GetLength(1))
+                mapData[x, y] = 0;
         }
     }
 
@@ -69,7 +92,8 @@ public class RoomGenerator : MonoBehaviour
     {
         for (int y = Mathf.Min(y1, y2); y <= Mathf.Max(y1, y2); y++)
         {
-            mapData[x, y] = 0;
+            if (x >= 0 && x < mapData.GetLength(0) && y >= 0 && y < mapData.GetLength(1))
+                mapData[x, y] = 0;
         }
     }
 }

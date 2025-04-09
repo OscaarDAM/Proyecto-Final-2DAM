@@ -504,9 +504,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 168531d338f25c0408f1b710d934bd84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomCount: 5
-  roomMinSize: 3
-  roomMaxSize: 4
+  roomCount: 10
+  roomMinSize: 5
+  roomMaxSize: 10
 --- !u!4 &1300595924
 Transform:
   m_ObjectHideFlags: 0

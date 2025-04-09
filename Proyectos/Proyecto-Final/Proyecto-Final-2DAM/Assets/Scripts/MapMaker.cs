@@ -21,32 +21,29 @@ public class MapMaker : MonoBehaviour
 
     void Start()
     {
-        // Inicializar el mapa con paredes sólidas (1)
         mapData = new int[mapWidth, mapHeight];
         for (int i = 0; i < mapWidth; i++)
         {
             for (int j = 0; j < mapHeight; j++)
             {
-                mapData[i, j] = 1; // Poner todo como pared
+                mapData[i, j] = 1;
             }
         }
 
-        // Generar habitaciones y pasillos
         roomGenerator.GenerateRooms(mapData, mapWidth, mapHeight);
 
-        // Generar tiles en el Tilemap
         GenerateTiles();
     }
 
     void GenerateTiles()
     {
-        tilemap.ClearAllTiles(); // Limpiar antes de dibujar
+        tilemap.ClearAllTiles();
 
         for (int i = 0; i < mapWidth; i++)
         {
             for (int j = 0; j < mapHeight; j++)
             {
-                if (mapData[i, j] == 0) // 0 representa el suelo
+                if (mapData[i, j] == 0) 
                 {
                     tilemap.SetTile(new Vector3Int(i, j, 0), tile);
                 }
