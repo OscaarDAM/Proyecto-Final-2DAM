@@ -8,24 +8,30 @@ public class RoomGenerator : MonoBehaviour
     public int roomMinSize = 4;
     public int roomMaxSize = 10;
 
+    public List<RoomData> rooms = new List<RoomData>();
+    public RoomData startRoom;
+
     public void GenerateRooms(int[,] mapData, int width, int height)
     {
-        List<Vector2Int> roomCenters = new List<Vector2Int>();
+        rooms.Clear();
         int attempts = 0;
         int maxAttempts = roomCount * 5;
 
-        while (roomCenters.Count < roomCount && attempts < maxAttempts)
+        while (rooms.Count < roomCount && attempts < maxAttempts)
         {
             attempts++;
 
             int w = Random.Range(roomMinSize, roomMaxSize);
-            if (w % 2 == 0) w++; // Asegurarse de que el ancho sea impar ( en el caso de querer hacer par se debe quitar )
+            if (w % 2 == 0) w++; // Asegurarse de que el ancho sea impar (en el caso de querer hacer par se debe quitar)
 
             int h = Random.Range(roomMinSize, roomMaxSize);
-            if (h % 2 == 0) h++; // Asegurarse de que la altura sea impar ( en el caso de querer hacer par se debe quitar )
+            if (h % 2 == 0) h++; // Asegurarse de que la altura sea impar (en el caso de querer hacer par se debe quitar)
 
             int x = Random.Range(1, width - w - 2);
             int y = Random.Range(1, height - h - 2);
+
+            // Verificar que la habitación no se salga del mapa
+            if (x < 1 || y < 1 || x + w >= width || y + h >= height) continue;
 
             if (!IsAreaEmpty(mapData, x - 1, y - 1, w + 2, h + 2))
                 continue;
@@ -42,13 +48,21 @@ public class RoomGenerator : MonoBehaviour
                 }
             }
 
-            roomCenters.Add(new Vector2Int(x + w / 2, y + h / 2));
+            Vector2Int center = new Vector2Int(x + w / 2, y + h / 2);
+            RectInt bounds = new RectInt(x, y, w, h);
+            rooms.Add(new RoomData(center, bounds));
+        }
+
+        // Asignar la primera habitación como la habitación de inicio
+        if (rooms.Count > 0)
+        {
+            startRoom = rooms[Random.Range(0, rooms.Count)];
         }
 
         // Conectar habitaciones con pasillos
-        for (int i = 1; i < roomCenters.Count; i++)
+        for (int i = 1; i < rooms.Count; i++)
         {
-            ConnectRooms(mapData, roomCenters[i - 1], roomCenters[i]);
+            ConnectRooms(mapData, rooms[i - 1].center, rooms[i].center);
         }
     }
 
