@@ -11,8 +11,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Button
+  - Background
   - 
   - 
   - 
@@ -38,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Button
+    uniqueID: 786359973
+    locked: 0
+  - name: Background
+    uniqueID: 435918265
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
