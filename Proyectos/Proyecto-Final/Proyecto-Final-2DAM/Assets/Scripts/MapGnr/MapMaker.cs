@@ -5,10 +5,11 @@ using UnityEngine.Tilemaps;
 
 public class MapMaker : MonoBehaviour
 {
-    // TILEMAP
-    public Tilemap tilemap;
+    // TILEMAPS
+    public Tilemap floorTilemap; // Suelo
+    public Tilemap wallTilemap;  // Muros con colisión
 
-    // TILES para suelo y muro
+    // TILES
     public TileBase floorTile;
     public TileBase wallTile;
 
@@ -19,31 +20,29 @@ public class MapMaker : MonoBehaviour
     // DATOS DEL MAPA
     private int[,] mapData;
 
-    // SCRIPTS PARA GENERAR MAPA
+    // GENERADOR DE HABITACIONES
     public RoomGenerator roomGenerator;
 
     void Start()
     {
-        // Inicializar mapa con muros
         mapData = new int[mapWidth, mapHeight];
+
         for (int i = 0; i < mapWidth; i++)
         {
             for (int j = 0; j < mapHeight; j++)
             {
-                mapData[i, j] = -1; // 1 = muro por defecto
+                mapData[i, j] = -1; // Espacio vacío
             }
         }
 
-        // Generar habitaciones y pasillos
         roomGenerator.GenerateRooms(mapData, mapWidth, mapHeight);
-
-        // Generar tiles visuales
         GenerateTiles();
     }
 
     void GenerateTiles()
     {
-        tilemap.ClearAllTiles();
+        floorTilemap.ClearAllTiles();
+        wallTilemap.ClearAllTiles();
 
         for (int i = 0; i < mapWidth; i++)
         {
@@ -54,21 +53,13 @@ public class MapMaker : MonoBehaviour
                 switch (mapData[i, j])
                 {
                     case 0: // suelo
-                        tilemap.SetTile(pos, floorTile);
+                        floorTilemap.SetTile(pos, floorTile);
                         break;
                     case 1: // muro
-                        tilemap.SetTile(pos, wallTile);
-                        break;
-                    default:
-                        tilemap.SetTile(pos, null);
+                        wallTilemap.SetTile(pos, wallTile);
                         break;
                 }
             }
         }
-    }
-
-    void Update()
-    {
-
     }
 }

@@ -52,6 +52,7 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
+    // Verificar si el área está vacía (sin muros ni suelos)
     bool IsAreaEmpty(int[,] mapData, int x, int y, int w, int h)
     {
         for (int dx = x; dx < x + w; dx++)
@@ -68,6 +69,7 @@ public class RoomGenerator : MonoBehaviour
         return true;
     }
 
+    // Conectar dos habitaciones con un pasillo
     void ConnectRooms(int[,] mapData, Vector2Int centerA, Vector2Int centerB)
     {
         int x1 = centerA.x, y1 = centerA.y;
@@ -85,6 +87,7 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
+    // Crear túneles horizontales
     void CreateHorizontalTunnel(int[,] mapData, int x1, int x2, int y)
     {
         for (int x = Mathf.Min(x1, x2); x <= Mathf.Max(x1, x2); x++)
@@ -103,6 +106,7 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
+    // Crear túneles verticales
     void CreateVerticalTunnel(int[,] mapData, int y1, int y2, int x)
     {
         for (int y = Mathf.Min(y1, y2); y <= Mathf.Max(y1, y2); y++)
