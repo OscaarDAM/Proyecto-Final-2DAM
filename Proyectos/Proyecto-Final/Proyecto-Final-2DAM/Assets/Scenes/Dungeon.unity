@@ -520,6 +520,7 @@ MonoBehaviour:
   mapHeight: 60
   roomGenerator: {fileID: 1300595923}
   playerPrefab: {fileID: 9151775346480704766, guid: 9e1fb8904ab808042aa3d4080b790390, type: 3}
+  enemyPrefab: {fileID: 440806720892308577, guid: decb91d1d7c05814eb054ac7c8ed5746, type: 3}
 --- !u!1 &1300595922
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,7 +598,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasGroup: {fileID: 248012462}
-  tiempoDeEsperaEntrada: 1
+  tiempoDeEsperaEntrada: 1.5
   tiempoDeEsperaSalida: 1
 --- !u!4 &1343488387
 Transform:

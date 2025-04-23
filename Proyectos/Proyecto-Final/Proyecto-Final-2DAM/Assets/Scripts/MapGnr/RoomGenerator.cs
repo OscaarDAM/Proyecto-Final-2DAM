@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class RoomGenerator : MonoBehaviour
 {
-    public int roomCount = 5;
-    public int roomMinSize = 4;
-    public int roomMaxSize = 10;
+    public int roomCount = 7;
+    public int roomMinSize = 7;
+    public int roomMaxSize = 7;
 
     public List<RoomData> rooms = new List<RoomData>();
     public RoomData startRoom;
@@ -33,7 +33,7 @@ public class RoomGenerator : MonoBehaviour
             // Verificar que la habitación no se salga del mapa
             if (x < 1 || y < 1 || x + w >= width || y + h >= height) continue;
 
-            if (!IsAreaEmpty(mapData, x - 1, y - 1, w + 2, h + 2))
+            if (!IsAreaEmpty(mapData, x - 2, y - 2, w + 4, h + 4))
                 continue;
 
             // Crear habitación con borde de muro
@@ -51,6 +51,8 @@ public class RoomGenerator : MonoBehaviour
             Vector2Int center = new Vector2Int(x + w / 2, y + h / 2);
             RectInt bounds = new RectInt(x, y, w, h);
             rooms.Add(new RoomData(center, bounds));
+
+            Debug.Log("Habitación creada en: " + bounds);
         }
 
         // Asignar la primera habitación como la habitación de inicio
@@ -64,24 +66,27 @@ public class RoomGenerator : MonoBehaviour
         {
             ConnectRooms(mapData, rooms[i - 1].center, rooms[i].center);
         }
+
+        Debug.Log("Habitaciones generadas: " + rooms.Count);
     }
 
     // Verificar si el área está vacía (sin muros ni suelos)
     bool IsAreaEmpty(int[,] mapData, int x, int y, int w, int h)
+{
+    for (int dx = x; dx < x + w; dx++)
     {
-        for (int dx = x; dx < x + w; dx++)
+        for (int dy = y; dy < y + h; dy++)
         {
-            for (int dy = y; dy < y + h; dy++)
-            {
-                if (dx < 0 || dy < 0 || dx >= mapData.GetLength(0) || dy >= mapData.GetLength(1))
-                    return false;
+            if (dx < 0 || dy < 0 || dx >= mapData.GetLength(0) || dy >= mapData.GetLength(1))
+                return false;
 
-                if (mapData[dx, dy] != -1)
-                    return false;
-            }
+            if (mapData[dx, dy] != -1)
+                return false;
         }
-        return true;
     }
+    return true;
+}
+
 
     // Conectar dos habitaciones con un pasillo
     void ConnectRooms(int[,] mapData, Vector2Int centerA, Vector2Int centerB)
