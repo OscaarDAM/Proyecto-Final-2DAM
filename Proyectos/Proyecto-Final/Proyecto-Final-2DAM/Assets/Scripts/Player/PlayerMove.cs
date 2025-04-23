@@ -7,6 +7,8 @@ public class PlayerMove              : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 movement;
 
+    public int health = 3; // Salud del jugador (ejemplo)
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();

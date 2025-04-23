@@ -108,8 +108,8 @@ public class MapMaker : MonoBehaviour
                 room.bounds.center.y
             );
             triggerCol.size = new Vector2(
-                room.bounds.width - 2,
-                room.bounds.height - 2
+                room.bounds.width - 0.5f,
+                room.bounds.height - 0.5f
             );
             RoomTrigger roomTrigger = triggerGO.AddComponent<RoomTrigger>();
 
