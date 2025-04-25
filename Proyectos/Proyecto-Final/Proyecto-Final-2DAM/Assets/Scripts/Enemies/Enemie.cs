@@ -8,6 +8,9 @@ public class EnemyFollow : MonoBehaviour
     private Rigidbody2D rb;
     private bool canFollow = false;
 
+    // Variable de vida del enemigo
+    public float health = 100f; // Vida inicial del enemigo
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -31,8 +34,27 @@ public class EnemyFollow : MonoBehaviour
         rb.MovePosition(newPos);
     }
 
+    // Método para activar o desactivar el seguimiento del jugador
     public void SetCanFollow(bool value)
     {
         canFollow = value;
+    }
+
+    // Método para aplicar daño al enemigo
+    public void TakeDamage(float damage)
+    {
+        health -= damage;  // Reducir la vida del enemigo
+
+        if (health <= 0)
+        {
+            KillEnemy();  // Si la vida llega a 0, matar al enemigo
+        }
+    }
+
+    // Método para destruir al enemigo
+    public void KillEnemy()
+    {
+        Debug.Log("El enemigo ha sido destruido.");
+        Destroy(gameObject);  // Destruir el objeto enemigo
     }
 }

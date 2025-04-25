@@ -113,6 +113,12 @@ public class MapMaker : MonoBehaviour
             );
             RoomTrigger roomTrigger = triggerGO.AddComponent<RoomTrigger>();
 
+            // Asignar referencias necesarias
+            roomTrigger.roomBounds = room.bounds;
+            roomTrigger.floorTilemap = floorTilemap;
+            roomTrigger.wallTilemap = wallTilemap;
+            roomTrigger.floorTile = floorTile;
+            roomTrigger.wallTile = wallTile;
 
             // Inicializar la lista de enemigos en el RoomTrigger
             int enemyCount = Mathf.Min(3, validPositions.Count);
@@ -127,8 +133,7 @@ public class MapMaker : MonoBehaviour
 
                 // Vincular el enemigo al RoomTrigger
                 EnemyFollow enemyScript = enemy.GetComponentInChildren<EnemyFollow>();
-                
-                // Verificar si el script EnemyFollow está presente en el prefab del enemigo
+
                 if (enemyScript == null)
                 {
                     Debug.LogError("EnemyFollow no se encontró en el prefab del enemigo.");
@@ -137,13 +142,9 @@ public class MapMaker : MonoBehaviour
                 {
                     roomTrigger.roomEnemies.Add(enemyScript);
                 }
-
             }
         }
     }
-
-
-
 
     private Vector3? GetValidSpawnPosition(int[,] map, RoomData room)
     {
@@ -153,11 +154,10 @@ public class MapMaker : MonoBehaviour
             {
                 if (map[x, y] == 0)
                 {
-                    return new Vector3(x + 0.5f, y + 0.5f, 0); // Centrado
+                    return new Vector3(x + 0.5f, y + 0.5f, 0);
                 }
             }
         }
         return null;
     }
 }
-
