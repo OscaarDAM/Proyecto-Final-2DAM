@@ -5,8 +5,8 @@ using UnityEngine;
 public class RoomGenerator : MonoBehaviour
 {
     public int roomCount = 7;
-    public int roomMinSize = 7;
-    public int roomMaxSize = 7;
+    public int roomMinSize = 11;
+    public int roomMaxSize = 11;
 
     public List<RoomData> rooms = new List<RoomData>();
     public RoomData startRoom;

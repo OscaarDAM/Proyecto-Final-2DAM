@@ -36,7 +36,7 @@ public class RoomTrigger : MonoBehaviour
                 enemy.SetCanFollow(true);
         }
 
-        BlockRoomBorders();
+        StartBlocking();
         StartCoroutine(CheckEnemiesCoroutine());
     }
 }
@@ -64,8 +64,15 @@ private void KillEnemiesInRoom()
     }
 }
 
-    private void BlockRoomBorders()
+    public void StartBlocking()
     {
+        StartCoroutine(BlockRoomBorders());
+    }
+
+    private IEnumerator BlockRoomBorders()
+    {
+        yield return new WaitForSeconds(1f);
+
         blockedTiles.Clear(); // Por si acaso
 
         Vector3Int[] directions = new Vector3Int[] {
