@@ -13,7 +13,7 @@ public class GameOverManager : MonoBehaviour
     public Button quitButton;
 
     public float fadeDuration = 2f;
-
+    public AudioSource gameOverSound; // Asigna el AudioSource desde el Inspector
     void Start()
     {
         canvasGameOver.SetActive(false);
@@ -25,9 +25,14 @@ public class GameOverManager : MonoBehaviour
         // 💥 PAUSAR EL JUEGO
         Time.timeScale = 0f;
 
+        if (gameOverSound != null)
+        {
+            gameOverSound.Play(); // Reproducir el sonido de Game Over
+        }
+
         // Ocultar el canvas de fondo del juego y mostrar el canvas de Game Over
         canvasGameOverBackground.SetActive(false);
-        
+
         canvasGameOver.SetActive(true);
 
         gameOverText.gameObject.SetActive(true);
