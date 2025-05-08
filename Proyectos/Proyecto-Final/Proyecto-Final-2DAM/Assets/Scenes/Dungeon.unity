@@ -475,52 +475,6 @@ RectTransform:
   m_AnchoredPosition: {x: -337, y: -56.190002}
   m_SizeDelta: {x: 485, y: 152.3803}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &135587427
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 135587429}
-  - component: {fileID: 135587428}
-  m_Layer: 0
-  m_Name: LevelManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &135587428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 135587427}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b769d7fcb6bb53241aab291510619057, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomGenerator: {fileID: 1300595923}
-  playerPrefab: {fileID: 9151775346480704766, guid: 9e1fb8904ab808042aa3d4080b790390, type: 3}
---- !u!4 &135587429
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 135587427}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 960, y: 540, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &148057378
 GameObject:
   m_ObjectHideFlags: 0
@@ -1801,8 +1755,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floorTilemap: {fileID: 238426274}
   wallTilemap: {fileID: 1863776244}
-  floorTile: {fileID: 11400000, guid: 3cd5b002dfd81ea4c99ab52383c9a07d, type: 2}
-  wallTile: {fileID: 11400000, guid: 6870e44c26467be4382ac5b0e6cc4600, type: 2}
+  floorTiles:
+  - {fileID: 11400000, guid: 3cd5b002dfd81ea4c99ab52383c9a07d, type: 2}
+  - {fileID: 11400000, guid: b86ed1cf049070f47bb6ff964b1d299a, type: 2}
+  - {fileID: 11400000, guid: 1aa0a7d257a82624b966271f144e7a02, type: 2}
+  - {fileID: 11400000, guid: ce8970402034b5c41851cb3b5e7a3036, type: 2}
+  wallTiles:
+  - {fileID: 11400000, guid: e9ddaa08eba3b5941856d80e51eb39cf, type: 2}
+  - {fileID: 11400000, guid: 9c4a23647e7b44e46ad6df501927b362, type: 2}
+  - {fileID: 11400000, guid: e2f9e38f7d0d3284fb486bc5829881aa, type: 2}
+  - {fileID: 11400000, guid: 6870e44c26467be4382ac5b0e6cc4600, type: 2}
   mapWidth: 60
   mapHeight: 60
   roomGenerator: {fileID: 1300595923}
@@ -3581,7 +3543,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -3944,7 +3906,6 @@ SceneRoots:
   - {fileID: 1300595924}
   - {fileID: 1685768256}
   - {fileID: 1343488387}
-  - {fileID: 135587429}
   - {fileID: 1367064831}
   - {fileID: 2071487939}
   - {fileID: 1582285149}
