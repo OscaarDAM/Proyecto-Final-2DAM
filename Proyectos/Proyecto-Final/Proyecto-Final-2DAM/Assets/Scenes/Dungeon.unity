@@ -1767,6 +1767,8 @@ MonoBehaviour:
   roomGenerator: {fileID: 1300595923}
   playerPrefab: {fileID: 9151775346480704766, guid: 9e1fb8904ab808042aa3d4080b790390, type: 3}
   enemyPrefab: {fileID: 440806720892308577, guid: decb91d1d7c05814eb054ac7c8ed5746, type: 3}
+  allEnemies: []
+  specialTile: {fileID: 11400000, guid: 0fc795f6fc0464e40abf6efb58006c17, type: 2}
 --- !u!1 &1180879091
 GameObject:
   m_ObjectHideFlags: 0
@@ -2031,6 +2033,7 @@ GameObject:
   - component: {fileID: 1367064830}
   - component: {fileID: 1367064832}
   - component: {fileID: 1367064833}
+  - component: {fileID: 1367064834}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2181,6 +2184,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1367064834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367064829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2439e19f7adb16f4491fa12c5fdaa6f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextLevelTriggerPrefab: {fileID: 6629482320686593087, guid: 3e515f93b7b79a84aa9d668cde312d64, type: 3}
+  tilemap: {fileID: 238426274}
+  specialTile: {fileID: 11400000, guid: 0fc795f6fc0464e40abf6efb58006c17, type: 2}
 --- !u!1 &1373824303
 GameObject:
   m_ObjectHideFlags: 0
