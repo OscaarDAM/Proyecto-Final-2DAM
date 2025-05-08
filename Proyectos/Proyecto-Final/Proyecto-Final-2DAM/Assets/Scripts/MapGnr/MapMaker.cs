@@ -9,9 +9,13 @@ public class MapMaker : MonoBehaviour
     public Tilemap floorTilemap;
     public Tilemap wallTilemap;
 
-    // TILES
-    public TileBase floorTile;
-    public TileBase wallTile;
+    [Header("Tilesets")]
+    public TileBase[] floorTiles; // Variantes de suelos
+    public TileBase[] wallTiles;  // Variantes de paredes
+
+    // Variables internas
+    [HideInInspector] public TileBase[] currentFloorPattern;
+    [HideInInspector] public TileBase currentWallTile;
 
     // MAPA
     public int mapWidth = 32;
@@ -36,16 +40,36 @@ public class MapMaker : MonoBehaviour
                 mapData[i, j] = -1;
         }
 
+        // Generar patrón aleatorio de tiles
+        GenerateRandomTileSet();
+
         roomGenerator.GenerateRooms(mapData, mapWidth, mapHeight);
         GenerateTiles();
         SpawnPlayer();
         SpawnEnemies();
     }
 
+    void GenerateRandomTileSet()
+    {
+        // Seleccionar de 1 a 2 tipos de suelo
+        int floorCount = Random.Range(1, 3);
+        List<TileBase> pattern = new List<TileBase>();
+        for (int i = 0; i < floorCount; i++)
+        {
+            pattern.Add(floorTiles[Random.Range(0, floorTiles.Length)]);
+        }
+        currentFloorPattern = pattern.ToArray();
+
+        // Seleccionar un tipo aleatorio de pared
+        currentWallTile = wallTiles[Random.Range(0, wallTiles.Length)];
+    }
+
     void GenerateTiles()
     {
         floorTilemap.ClearAllTiles();
         wallTilemap.ClearAllTiles();
+
+        int patternIndex = 0;
 
         for (int i = 0; i < mapWidth; i++)
         {
@@ -55,10 +79,12 @@ public class MapMaker : MonoBehaviour
                 switch (mapData[i, j])
                 {
                     case 0:
-                        floorTilemap.SetTile(pos, floorTile);
+                        TileBase tileToUse = currentFloorPattern[patternIndex % currentFloorPattern.Length];
+                        floorTilemap.SetTile(pos, tileToUse);
+                        patternIndex++;
                         break;
                     case 1:
-                        wallTilemap.SetTile(pos, wallTile);
+                        wallTilemap.SetTile(pos, currentWallTile);
                         break;
                 }
             }
@@ -98,7 +124,6 @@ public class MapMaker : MonoBehaviour
                 }
             }
 
-            // Crear un GameObject vacío para el trigger de la habitación
             GameObject triggerGO = new GameObject("RoomTrigger");
             BoxCollider2D triggerCol = triggerGO.AddComponent<BoxCollider2D>();
             triggerCol.isTrigger = true;
@@ -113,14 +138,13 @@ public class MapMaker : MonoBehaviour
             );
             RoomTrigger roomTrigger = triggerGO.AddComponent<RoomTrigger>();
 
-            // Asignar referencias necesarias
+            // Pasar los tiles actuales al RoomTrigger
             roomTrigger.roomBounds = room.bounds;
             roomTrigger.floorTilemap = floorTilemap;
             roomTrigger.wallTilemap = wallTilemap;
-            roomTrigger.floorTile = floorTile;
-            roomTrigger.wallTile = wallTile;
+            roomTrigger.floorTile = currentFloorPattern[0];
+            roomTrigger.wallTile = currentWallTile;
 
-            // Inicializar la lista de enemigos en el RoomTrigger
             int enemyCount = Mathf.Min(3, validPositions.Count);
             for (int i = 0; i < enemyCount; i++)
             {
@@ -131,16 +155,14 @@ public class MapMaker : MonoBehaviour
                 Vector3 spawnPos = new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0);
                 GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
 
-                // Vincular el enemigo al RoomTrigger
                 EnemyFollow enemyScript = enemy.GetComponentInChildren<EnemyFollow>();
-
-                if (enemyScript == null)
+                if (enemyScript != null)
                 {
-                    Debug.LogError("EnemyFollow no se encontró en el prefab del enemigo.");
+                    roomTrigger.roomEnemies.Add(enemyScript);
                 }
                 else
                 {
-                    roomTrigger.roomEnemies.Add(enemyScript);
+                    Debug.LogError("EnemyFollow no se encontró en el prefab del enemigo.");
                 }
             }
         }
