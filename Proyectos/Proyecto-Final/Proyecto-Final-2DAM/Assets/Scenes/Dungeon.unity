@@ -1761,12 +1761,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1aa0a7d257a82624b966271f144e7a02, type: 2}
   - {fileID: 11400000, guid: ce8970402034b5c41851cb3b5e7a3036, type: 2}
   wallTiles:
-  - {fileID: 11400000, guid: e9ddaa08eba3b5941856d80e51eb39cf, type: 2}
-  - {fileID: 11400000, guid: 9c4a23647e7b44e46ad6df501927b362, type: 2}
   - {fileID: 11400000, guid: e2f9e38f7d0d3284fb486bc5829881aa, type: 2}
-  - {fileID: 11400000, guid: 6870e44c26467be4382ac5b0e6cc4600, type: 2}
-  mapWidth: 60
-  mapHeight: 60
+  mapWidth: 70
+  mapHeight: 70
   roomGenerator: {fileID: 1300595923}
   playerPrefab: {fileID: 9151775346480704766, guid: 9e1fb8904ab808042aa3d4080b790390, type: 3}
   enemyPrefab: {fileID: 440806720892308577, guid: decb91d1d7c05814eb054ac7c8ed5746, type: 3}

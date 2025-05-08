@@ -129,6 +129,11 @@ public class MapMaker : MonoBehaviour
                 EnemyFollow enemyScript = enemy.GetComponentInChildren<EnemyFollow>();
                 if (enemyScript != null)
                 {
+                    enemyScript.roomBounds = new Bounds(
+                    new Vector3(room.bounds.center.x, room.bounds.center.y, 0f),
+                    new Vector3(room.bounds.size.x, room.bounds.size.y, 1f)
+                    );
+
                     roomTrigger.roomEnemies.Add(enemyScript);
                 }
             }
