@@ -1765,8 +1765,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9c4a23647e7b44e46ad6df501927b362, type: 2}
   - {fileID: 11400000, guid: e2f9e38f7d0d3284fb486bc5829881aa, type: 2}
   - {fileID: 11400000, guid: 6870e44c26467be4382ac5b0e6cc4600, type: 2}
-  currentFloorPattern: []
-  currentWallTile: {fileID: 0}
   mapWidth: 60
   mapHeight: 60
   roomGenerator: {fileID: 1300595923}
@@ -3545,7 +3543,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16

@@ -1,38 +1,40 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class MapMaker : MonoBehaviour
 {
-    // TILEMAPS
     public Tilemap floorTilemap;
     public Tilemap wallTilemap;
 
-    [Header("Tilesets")]
-    public TileBase[] floorTiles; // Variantes de suelos
-    public TileBase[] wallTiles;  // Variantes de paredes
+    public TileBase[] floorTiles;
+    public TileBase[] wallTiles;
 
-    // Variables internas
-    [HideInInspector] public TileBase[] currentFloorPattern;
-    [HideInInspector] public TileBase currentWallTile;
-
-    // MAPA
     public int mapWidth = 32;
     public int mapHeight = 32;
     private int[,] mapData;
 
-    // GENERADOR DE HABITACIONES
     public RoomGenerator roomGenerator;
 
-    // JUGADOR
     public GameObject playerPrefab;
-
-    // ENEMIGOS
     public GameObject enemyPrefab;
+
+    private TileBase currentWallTile;
 
     void Start()
     {
+        currentWallTile = wallTiles[Random.Range(0, wallTiles.Length)];
+
+        List<TileBase> selectedFloorPattern = new List<TileBase>();
+        int totalLength = mapWidth * mapHeight;
+        while (selectedFloorPattern.Count < totalLength)
+        {
+            TileBase floor = floorTiles[Random.Range(0, floorTiles.Length)];
+            int repeat = Random.Range(1, 4);
+            for (int i = 0; i < repeat; i++)
+                selectedFloorPattern.Add(floor);
+        }
+
         mapData = new int[mapWidth, mapHeight];
         for (int i = 0; i < mapWidth; i++)
         {
@@ -40,37 +42,18 @@ public class MapMaker : MonoBehaviour
                 mapData[i, j] = -1;
         }
 
-        // Generar patrón aleatorio de tiles
-        GenerateRandomTileSet();
-
         roomGenerator.GenerateRooms(mapData, mapWidth, mapHeight);
-        GenerateTiles();
+        GenerateTiles(selectedFloorPattern);
         SpawnPlayer();
         SpawnEnemies();
     }
 
-    void GenerateRandomTileSet()
-    {
-        // Seleccionar de 1 a 2 tipos de suelo
-        int floorCount = Random.Range(1, 3);
-        List<TileBase> pattern = new List<TileBase>();
-        for (int i = 0; i < floorCount; i++)
-        {
-            pattern.Add(floorTiles[Random.Range(0, floorTiles.Length)]);
-        }
-        currentFloorPattern = pattern.ToArray();
-
-        // Seleccionar un tipo aleatorio de pared
-        currentWallTile = wallTiles[Random.Range(0, wallTiles.Length)];
-    }
-
-    void GenerateTiles()
+    void GenerateTiles(List<TileBase> floorPattern)
     {
         floorTilemap.ClearAllTiles();
         wallTilemap.ClearAllTiles();
 
-        int patternIndex = 0;
-
+        int index = 0;
         for (int i = 0; i < mapWidth; i++)
         {
             for (int j = 0; j < mapHeight; j++)
@@ -79,9 +62,8 @@ public class MapMaker : MonoBehaviour
                 switch (mapData[i, j])
                 {
                     case 0:
-                        TileBase tileToUse = currentFloorPattern[patternIndex % currentFloorPattern.Length];
-                        floorTilemap.SetTile(pos, tileToUse);
-                        patternIndex++;
+                        floorTilemap.SetTile(pos, floorPattern[index % floorPattern.Count]);
+                        index++;
                         break;
                     case 1:
                         wallTilemap.SetTile(pos, currentWallTile);
@@ -100,10 +82,6 @@ public class MapMaker : MonoBehaviour
             {
                 Instantiate(playerPrefab, spawnPos.Value, Quaternion.identity);
             }
-            else
-            {
-                Debug.LogError("No se encontró una posición de suelo válida dentro de la habitación inicial.");
-            }
         }
     }
 
@@ -111,8 +89,7 @@ public class MapMaker : MonoBehaviour
     {
         foreach (var room in roomGenerator.rooms)
         {
-            if (room == roomGenerator.startRoom)
-                continue;
+            if (room == roomGenerator.startRoom) continue;
 
             List<Vector2Int> validPositions = new List<Vector2Int>();
             for (int x = room.bounds.xMin + 2; x < room.bounds.xMax - 2; x++)
@@ -128,22 +105,16 @@ public class MapMaker : MonoBehaviour
             BoxCollider2D triggerCol = triggerGO.AddComponent<BoxCollider2D>();
             triggerCol.isTrigger = true;
             triggerGO.layer = LayerMask.NameToLayer("Default");
-            triggerGO.transform.position = new Vector2(
-                room.bounds.center.x,
-                room.bounds.center.y
-            );
-            triggerCol.size = new Vector2(
-                room.bounds.width - 0.5f,
-                room.bounds.height - 0.5f
-            );
+            triggerGO.transform.position = new Vector2(room.bounds.center.x, room.bounds.center.y);
+            triggerCol.size = new Vector2(room.bounds.width - 0.5f, room.bounds.height - 0.5f);
             RoomTrigger roomTrigger = triggerGO.AddComponent<RoomTrigger>();
 
-            // Pasar los tiles actuales al RoomTrigger
             roomTrigger.roomBounds = room.bounds;
             roomTrigger.floorTilemap = floorTilemap;
             roomTrigger.wallTilemap = wallTilemap;
-            roomTrigger.floorTile = currentFloorPattern[0];
             roomTrigger.wallTile = currentWallTile;
+            roomTrigger.floorTiles = floorTiles; // <-- importante
+            roomTrigger.roomEnemies = new List<EnemyFollow>();
 
             int enemyCount = Mathf.Min(3, validPositions.Count);
             for (int i = 0; i < enemyCount; i++)
@@ -159,10 +130,6 @@ public class MapMaker : MonoBehaviour
                 if (enemyScript != null)
                 {
                     roomTrigger.roomEnemies.Add(enemyScript);
-                }
-                else
-                {
-                    Debug.LogError("EnemyFollow no se encontró en el prefab del enemigo.");
                 }
             }
         }
