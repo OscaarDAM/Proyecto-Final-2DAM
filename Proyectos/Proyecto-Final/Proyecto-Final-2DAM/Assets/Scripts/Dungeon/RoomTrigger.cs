@@ -82,5 +82,7 @@ public class RoomTrigger : MonoBehaviour
             floorTilemap.SetTile(tilePos, floorTiles.Length > 0 ? floorTiles[0] : null);
         }
         blockedTiles.Clear();
+
+        FindObjectOfType<MapMaker>().CheckAllEnemiesDead();
     }
 }
