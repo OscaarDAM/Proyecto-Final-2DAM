@@ -21,6 +21,11 @@ public class MapMaker : MonoBehaviour
 
     private TileBase currentWallTile;
 
+    // ✅ Lista global para todos los enemigos
+    public List<EnemyFollow> allEnemies = new List<EnemyFollow>();
+
+    public TileBase specialTile; 
+
     void Start()
     {
         currentWallTile = wallTiles[Random.Range(0, wallTiles.Length)];
@@ -113,7 +118,7 @@ public class MapMaker : MonoBehaviour
             roomTrigger.floorTilemap = floorTilemap;
             roomTrigger.wallTilemap = wallTilemap;
             roomTrigger.wallTile = currentWallTile;
-            roomTrigger.floorTiles = floorTiles; // <-- importante
+            roomTrigger.floorTiles = floorTiles;
             roomTrigger.roomEnemies = new List<EnemyFollow>();
 
             int enemyCount = Mathf.Min(3, validPositions.Count);
@@ -130,15 +135,64 @@ public class MapMaker : MonoBehaviour
                 if (enemyScript != null)
                 {
                     enemyScript.roomBounds = new Bounds(
-                    new Vector3(room.bounds.center.x, room.bounds.center.y, 0f),
-                    new Vector3(room.bounds.size.x, room.bounds.size.y, 1f)
+                        new Vector3(room.bounds.center.x, room.bounds.center.y, 0f),
+                        new Vector3(room.bounds.size.x, room.bounds.size.y, 1f)
                     );
 
                     roomTrigger.roomEnemies.Add(enemyScript);
+
+                    // ✅ Agregar a la lista global
+                    allEnemies.Add(enemyScript);
                 }
             }
         }
     }
+
+    public void CheckAllEnemiesDead()
+    {
+        if (allEnemies.TrueForAll(e => e == null))
+        {
+            Debug.Log("¡Todos los enemigos han muerto!");
+
+            // Encontrar la sala donde está el jugador
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) return;
+
+            Vector3 playerPos = player.transform.position;
+            RoomData chosenRoom = null;
+
+            foreach (var room in roomGenerator.rooms)
+            {
+                if (room.bounds.Contains((Vector2Int)Vector3Int.FloorToInt(playerPos)))
+                {
+                    chosenRoom = room;
+                    break;
+                }
+            }
+
+            if (chosenRoom == null)
+            {
+                Debug.LogWarning("No se encontró la sala del jugador.");
+                return;
+            }
+
+            // Buscar una posición de suelo válida en esa sala
+            for (int attempt = 0; attempt < 50; attempt++)
+            {
+                int x = Random.Range(chosenRoom.bounds.xMin + 1, chosenRoom.bounds.xMax - 1);
+                int y = Random.Range(chosenRoom.bounds.yMin + 1, chosenRoom.bounds.yMax - 1);
+                Vector3Int tilePos = new Vector3Int(x, y, 0);
+
+                if (floorTilemap.GetTile(tilePos) != null && wallTilemap.GetTile(tilePos) == null)
+                {
+                    floorTilemap.SetTile(tilePos, specialTile);
+                    Debug.Log("Tile especial colocado en: " + tilePos);
+                    break;
+                }
+            }
+        }
+    }
+
 
     private Vector3? GetValidSpawnPosition(int[,] map, RoomData room)
     {

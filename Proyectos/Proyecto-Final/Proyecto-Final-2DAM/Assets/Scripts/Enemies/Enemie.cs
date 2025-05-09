@@ -32,6 +32,27 @@ public class EnemyFollow : MonoBehaviour
         patrolTarget = GetNewPatrolTarget();
     }
 
+    private void Update()
+    {
+        // Comprobamos si se presiona la tecla 'M'
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            MatarTodosLosEnemigos();
+        }
+    }
+
+    private void MatarTodosLosEnemigos()
+    {
+        // Encontrar todos los enemigos en la escena
+        GameObject[] enemigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+        foreach (GameObject enemigo in enemigos)
+        {
+            // Llamar al método de destrucción de cada enemigo
+            enemigo.GetComponent<EnemyFollow>().TakeDamage(1000f);  // Damos un daño alto para destruirlo
+        }
+    }
+
     private void FixedUpdate()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
