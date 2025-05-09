@@ -1876,7 +1876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 168531d338f25c0408f1b710d934bd84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomCount: 7
+  roomCount: 8
   roomMinSize: 11
   roomMaxSize: 11
 --- !u!4 &1300595924

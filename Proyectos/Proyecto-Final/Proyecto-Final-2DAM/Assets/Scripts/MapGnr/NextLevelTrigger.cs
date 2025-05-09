@@ -3,20 +3,19 @@ using UnityEngine.SceneManagement;
 
 public class NextLevelTrigger : MonoBehaviour
 {
-    // Este método se llama cuando el jugador toca el tile especial
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            // Aquí puedes hacer otras cosas antes de recargar la escena, como actualizar el tiempo o guardar el estado.
-            RecargarEscena();
-        }
-    }
+            PlayerMove player = other.GetComponent<PlayerMove>();
+            if (player != null)
+            {
+                PlayerPrefs.SetInt("PlayerHealth", player.health);
+                // Puedes guardar más datos si los agregas después, como puntuación, nivel, etc.
+            }
 
-    // Método para recargar la escena
-    private void RecargarEscena()
-    {
-        // Esto recarga la escena activa (la misma en la que estás)
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            // Reinicia la escena actual (puedes cambiarlo por otro nombre de escena si quieres)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }
