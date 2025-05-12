@@ -11,10 +11,12 @@ public class NextLevelTrigger : MonoBehaviour
             if (player != null)
             {
                 PlayerPrefs.SetInt("PlayerHealth", player.health);
-                // Puedes guardar más datos si los agregas después, como puntuación, nivel, etc.
             }
 
-            // Reinicia la escena actual (puedes cambiarlo por otro nombre de escena si quieres)
+            // Incrementa el nivel
+            int currentLevel = PlayerPrefs.GetInt("Level", 1);
+            PlayerPrefs.SetInt("Level", currentLevel + 1);
+
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }

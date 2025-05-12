@@ -32,6 +32,10 @@ public class MapMaker : MonoBehaviour
 
     void Start()
     {
+
+        int currentLevel = PlayerPrefs.GetInt("Level", 1);
+        Debug.Log("Nivel actual: " + currentLevel);
+
         audioSource = gameObject.AddComponent<AudioSource>();
         currentWallTile = wallTiles[Random.Range(0, wallTiles.Length)];
 
@@ -97,6 +101,8 @@ public class MapMaker : MonoBehaviour
 
     void SpawnEnemies()
     {
+        int currentLevel = PlayerPrefs.GetInt("Level", 1);
+
         foreach (var room in roomGenerator.rooms)
         {
             if (room == roomGenerator.startRoom) continue;
@@ -126,7 +132,9 @@ public class MapMaker : MonoBehaviour
             roomTrigger.floorTiles = floorTiles;
             roomTrigger.roomEnemies = new List<EnemyFollow>();
 
-            int enemyCount = Mathf.Min(3, validPositions.Count);
+            // 🔥 Escala el número de enemigos por sala según el nivel
+            int enemyCount = Mathf.Min(2 + currentLevel, validPositions.Count);
+
             for (int i = 0; i < enemyCount; i++)
             {
                 int index = Random.Range(0, validPositions.Count);
@@ -145,13 +153,12 @@ public class MapMaker : MonoBehaviour
                     );
 
                     roomTrigger.roomEnemies.Add(enemyScript);
-
-                    // ✅ Agregar a la lista global
                     allEnemies.Add(enemyScript);
                 }
             }
         }
     }
+
 
     public void CheckAllEnemiesDead()
     {
