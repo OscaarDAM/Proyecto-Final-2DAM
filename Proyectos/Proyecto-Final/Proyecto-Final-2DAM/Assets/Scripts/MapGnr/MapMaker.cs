@@ -24,10 +24,15 @@ public class MapMaker : MonoBehaviour
     // ✅ Lista global para todos los enemigos
     public List<EnemyFollow> allEnemies = new List<EnemyFollow>();
 
-    public TileBase specialTile; 
+    public TileBase specialTile;
+
+    public AudioClip specialTileSound;
+    private AudioSource audioSource;
+
 
     void Start()
     {
+        audioSource = gameObject.AddComponent<AudioSource>();
         currentWallTile = wallTiles[Random.Range(0, wallTiles.Length)];
 
         List<TileBase> selectedFloorPattern = new List<TileBase>();
@@ -185,6 +190,13 @@ public class MapMaker : MonoBehaviour
                 {
                     // Colocar tile especial
                     floorTilemap.SetTile(tilePos, specialTile);
+
+                    // Reproducir sonido
+                    if (specialTileSound != null && audioSource != null)
+                    {
+                        audioSource.PlayOneShot(specialTileSound);
+                    }
+
                     Debug.Log("Tile especial colocado en: " + tilePos);
 
                     // Crear el GameObject trigger directamente desde código

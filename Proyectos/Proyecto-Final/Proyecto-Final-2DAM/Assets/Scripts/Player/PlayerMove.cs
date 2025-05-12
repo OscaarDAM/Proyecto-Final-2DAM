@@ -33,6 +33,11 @@ public class PlayerMove : MonoBehaviour
             health = 0;
         }
 
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            health--;
+        }
+
         if (health <= 0 && !isDead)
         {
             isDead = true;
@@ -41,17 +46,10 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-
-
     void FixedUpdate()
     {
         // Movimiento del personaje
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
-    }
-
-    public void QuitarTodaLaVida()
-    {
-        health = 0;
     }
 
 }

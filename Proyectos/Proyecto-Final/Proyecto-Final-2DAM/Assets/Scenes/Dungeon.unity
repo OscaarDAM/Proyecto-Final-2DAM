@@ -1769,6 +1769,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 440806720892308577, guid: decb91d1d7c05814eb054ac7c8ed5746, type: 3}
   allEnemies: []
   specialTile: {fileID: 11400000, guid: 0fc795f6fc0464e40abf6efb58006c17, type: 2}
+  specialTileSound: {fileID: 8300000, guid: 258c7fbc4af87c84ba73eafd235275ff, type: 3}
 --- !u!1 &1180879091
 GameObject:
   m_ObjectHideFlags: 0
