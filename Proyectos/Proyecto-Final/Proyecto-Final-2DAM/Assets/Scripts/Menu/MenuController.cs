@@ -40,12 +40,12 @@ public class MenuController : MonoBehaviour
         SceneManager.LoadScene(nombreEscena);
     }
     public void CambiarAScena(string nombreEscena)
-{
-    ReproducirSonido();
-    TransicionEscenasUI.Instance.DisolverSalida(() =>
     {
-        SceneManager.LoadScene(nombreEscena);
-    });
-}
-
+        ReproducirSonido();
+        TransicionEscenasUI.Instance.DisolverSalida(() =>
+        {
+            PlayerPrefs.SetInt("Level", 1);
+            SceneManager.LoadScene(nombreEscena);
+        });
+    }
 }
