@@ -24,10 +24,19 @@ public class MapMaker : MonoBehaviour
     // ✅ Lista global para todos los enemigos
     public List<EnemyFollow> allEnemies = new List<EnemyFollow>();
 
-    public TileBase specialTile; 
+    public TileBase specialTile;
+
+    public AudioClip specialTileSound;
+    private AudioSource audioSource;
+
 
     void Start()
     {
+
+        int currentLevel = PlayerPrefs.GetInt("Level", 1);
+        Debug.Log("Nivel actual: " + currentLevel);
+
+        audioSource = gameObject.AddComponent<AudioSource>();
         currentWallTile = wallTiles[Random.Range(0, wallTiles.Length)];
 
         List<TileBase> selectedFloorPattern = new List<TileBase>();
@@ -92,6 +101,8 @@ public class MapMaker : MonoBehaviour
 
     void SpawnEnemies()
     {
+        int currentLevel = PlayerPrefs.GetInt("Level", 1);
+
         foreach (var room in roomGenerator.rooms)
         {
             if (room == roomGenerator.startRoom) continue;
@@ -121,7 +132,9 @@ public class MapMaker : MonoBehaviour
             roomTrigger.floorTiles = floorTiles;
             roomTrigger.roomEnemies = new List<EnemyFollow>();
 
-            int enemyCount = Mathf.Min(3, validPositions.Count);
+            // 🔥 Escala el número de enemigos por sala según el nivel
+            int enemyCount = Mathf.Min(2 + currentLevel, validPositions.Count);
+
             for (int i = 0; i < enemyCount; i++)
             {
                 int index = Random.Range(0, validPositions.Count);
@@ -140,13 +153,12 @@ public class MapMaker : MonoBehaviour
                     );
 
                     roomTrigger.roomEnemies.Add(enemyScript);
-
-                    // ✅ Agregar a la lista global
                     allEnemies.Add(enemyScript);
                 }
             }
         }
     }
+
 
     public void CheckAllEnemiesDead()
     {
@@ -154,7 +166,6 @@ public class MapMaker : MonoBehaviour
         {
             Debug.Log("¡Todos los enemigos han muerto!");
 
-            // Encontrar la sala donde está el jugador
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player == null) return;
 
@@ -176,7 +187,6 @@ public class MapMaker : MonoBehaviour
                 return;
             }
 
-            // Buscar una posición de suelo válida en esa sala
             for (int attempt = 0; attempt < 50; attempt++)
             {
                 int x = Random.Range(chosenRoom.bounds.xMin + 1, chosenRoom.bounds.xMax - 1);
@@ -185,13 +195,38 @@ public class MapMaker : MonoBehaviour
 
                 if (floorTilemap.GetTile(tilePos) != null && wallTilemap.GetTile(tilePos) == null)
                 {
+                    // Colocar tile especial
                     floorTilemap.SetTile(tilePos, specialTile);
+
+                    // Reproducir sonido
+                    if (specialTileSound != null && audioSource != null)
+                    {
+                        audioSource.PlayOneShot(specialTileSound);
+                    }
+
                     Debug.Log("Tile especial colocado en: " + tilePos);
+
+                    // Crear el GameObject trigger directamente desde código
+                    GameObject triggerGO = new GameObject("NextLevelTrigger");
+
+                    // Posicionar en el centro del tile
+                    Vector3 worldPos = floorTilemap.CellToWorld(tilePos) + new Vector3(0.5f, 0.5f, 0f);
+                    triggerGO.transform.position = worldPos;
+
+                    // Añadir collider
+                    BoxCollider2D col = triggerGO.AddComponent<BoxCollider2D>();
+                    col.isTrigger = true;
+                    col.size = new Vector2(0.9f, 0.9f); // Opcional: ajusta tamaño si quieres
+
+                    // Añadir el script que reinicia la escena
+                    triggerGO.AddComponent<NextLevelTrigger>();
+
                     break;
                 }
             }
         }
     }
+
 
 
     private Vector3? GetValidSpawnPosition(int[,] map, RoomData room)

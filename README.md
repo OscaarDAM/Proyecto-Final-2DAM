@@ -31,19 +31,19 @@ Como último paso hasta ahora, configuré que, además de seguir al jugador, al 
 - Barra de vida del jugador  
 - Enemigos que siguen al jugador al entrar a la sala  
 - Puertas que se abren al entrar a la sala  
-- Generación procedural de niveles  
+- Generación procedural de niveles
+- Pantalla de muerte y pantalla de pausa
+- Reemplazar el sprite estático de suelo y paredes por un array de sprites colocados aleatoriamente
+- Añadir una escena final
+- Pasar de nivel conservando estadísticas, incluyendo la vida restante
 
 ---
 
 ## Futuras implementaciones
 
 - Quitar vida a enemigos con armas  
-- Pantalla de muerte y pantalla de pausa  
-- Pasar de nivel conservando estadísticas, incluyendo la vida restante  
-- Reemplazar el sprite estático de suelo y paredes por un array de sprites colocados aleatoriamente  
 - Crear diferentes tipos de mecánicas de ataque para los enemigos  
-- Crear animaciones de movimiento y ataque  
-- Añadir una escena final con el tiempo de juego y estadísticas de enemigos eliminados  
+- Crear animaciones de movimiento y ataque   
 - Crear armas para el juego  
 - Crear efectos visuales y de sonido  
 - Crear objetos de curación y velocidad  
