@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 762892212715105311}
   - component: {fileID: 8409348317716965227}
   - component: {fileID: 1766606677766167754}
+  - component: {fileID: 3196502145882139034}
   m_Layer: 8
   m_Name: Model
   m_TagString: Player
@@ -273,12 +274,28 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4485857929323850799}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38fc685e704b5d8419db3df29e4da74c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+  health: 3
+  gameOverManager: {fileID: 0}
+--- !u!114 &3196502145882139034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4485857929323850799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfcadd86b4b1d06459fb79e65f2fc7a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  joystick: {fileID: 0}
   health: 3
   gameOverManager: {fileID: 0}
 --- !u!1 &6586195374371032820

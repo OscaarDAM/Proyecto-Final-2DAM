@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class BarraVida : MonoBehaviour
 {
     public Image barraVida;
-    private PlayerMove playerMove;
+    private PlayerJoystickMove playerMove;
     private float vidaMaxima;
 
     void Update()
@@ -15,7 +15,7 @@ public class BarraVida : MonoBehaviour
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null)
             {
-                playerMove = player.GetComponent<PlayerMove>();
+                playerMove = player.GetComponent<PlayerJoystickMove>();
                 vidaMaxima = playerMove.health;
             }
         }
