@@ -42,4 +42,12 @@ public class CodePause : MonoBehaviour
         Time.timeScale = 1f; // Reanuda el juego antes de cambiar de escena
         SceneManager.LoadScene("Menu"); // Cambia a la escena del menú principal
     }
+
+    public void PauseGame()
+    {
+        pauseMenu.SetActive(true);
+        isPaused = true;
+
+        Time.timeScale = 0f; // Pausa el juego
+    }
 }

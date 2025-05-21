@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using System.Collections;
-
 public class TilemapDoorDetector : MonoBehaviour
 {
     public Tilemap tilemapPared;
@@ -15,7 +14,7 @@ public class TilemapDoorDetector : MonoBehaviour
     // Para Puerta 2
     public TileBase nuevoTilePuerta2;
     public Vector3Int posicionPuerta2 = new Vector3Int(7, -4, 0);
-    public string scenePuerta2 = "NivelB";
+    public string scenePuerta2 = "Oleadas";
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -37,6 +36,12 @@ public class TilemapDoorDetector : MonoBehaviour
         if (playerMove != null)
         {
             playerMove.enabled = false;
+        }
+
+        PlayerJoystickMove playerJoystickMove = FindObjectOfType<PlayerJoystickMove>();
+        if (playerJoystickMove != null)
+        {
+            playerJoystickMove.enabled = false;
         }
 
         // Cambiar el tile en la posición correspondiente
