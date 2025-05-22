@@ -1881,7 +1881,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1aa0a7d257a82624b966271f144e7a02, type: 2}
   - {fileID: 11400000, guid: ce8970402034b5c41851cb3b5e7a3036, type: 2}
   wallTiles:
-  - {fileID: 11400000, guid: e2f9e38f7d0d3284fb486bc5829881aa, type: 2}
+  - {fileID: 11400000, guid: 99c19ad395867cb4f9e547d0a7de13c9, type: 2}
   mapWidth: 70
   mapHeight: 70
   roomGenerator: {fileID: 1300595923}
@@ -1890,6 +1890,8 @@ MonoBehaviour:
   allEnemies: []
   specialTile: {fileID: 11400000, guid: 0fc795f6fc0464e40abf6efb58006c17, type: 2}
   specialTileSound: {fileID: 8300000, guid: 258c7fbc4af87c84ba73eafd235275ff, type: 3}
+  cleanWallTile: {fileID: 11400000, guid: 47bacd4da9cabc541bbdbb1a5d161270, type: 2}
+  wallChangeDelay: 0.02
 --- !u!1 &1127565771
 GameObject:
   m_ObjectHideFlags: 0

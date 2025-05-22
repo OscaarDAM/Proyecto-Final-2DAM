@@ -1,21 +1,27 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class MapMaker : MonoBehaviour
 {
+    // Tilemaps para el suelo y las paredes
     public Tilemap floorTilemap;
     public Tilemap wallTilemap;
 
+    // Tiles para el suelo y las paredes
     public TileBase[] floorTiles;
     public TileBase[] wallTiles;
 
+    // Dimensiones del mapa
     public int mapWidth = 32;
     public int mapHeight = 32;
     private int[,] mapData;
 
+    // Referencia al generador de habitaciones
     public RoomGenerator roomGenerator;
 
+    // Prefabs para el jugador y los enemigos
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
 
@@ -24,10 +30,17 @@ public class MapMaker : MonoBehaviour
     // ✅ Lista global para todos los enemigos
     public List<EnemyFollow> allEnemies = new List<EnemyFollow>();
 
+    // Tile especial que se coloca al final
     public TileBase specialTile;
 
+    // Sonido para el tile especial
     public AudioClip specialTileSound;
     private AudioSource audioSource;
+
+    // Tile para limpiar paredes 
+    public TileBase cleanWallTile;
+    public float wallChangeDelay = 0.02f;
+
 
 
     void Start()
@@ -221,13 +234,13 @@ public class MapMaker : MonoBehaviour
                     // Añadir el script que reinicia la escena
                     triggerGO.AddComponent<NextLevelTrigger>();
 
+                    // 🔁 Aquí va la llamada a la corutina
+                    StartCoroutine(GradualWallTileChange());
                     break;
                 }
             }
         }
     }
-
-
 
     private Vector3? GetValidSpawnPosition(int[,] map, RoomData room)
     {
@@ -243,4 +256,37 @@ public class MapMaker : MonoBehaviour
         }
         return null;
     }
+
+    IEnumerator GradualWallTileChange()
+    {
+        BoundsInt bounds = wallTilemap.cellBounds;
+
+        int minSum = bounds.xMin + bounds.yMin;
+        int maxSum = bounds.xMax + bounds.yMax;
+
+        for (int sum = minSum; sum <= maxSum; sum++)
+        {
+            for (int x = bounds.xMin; x <= bounds.xMax; x++)
+            {
+                for (int y = bounds.yMin; y <= bounds.yMax; y++)
+                {
+                    if (x + y == sum)
+                    {
+                        Vector3Int pos = new Vector3Int(x, y, 0);
+                        TileBase current = wallTilemap.GetTile(pos);
+                        if (current == currentWallTile)
+                        {
+                            wallTilemap.SetTile(pos, cleanWallTile);
+                        }
+                    }
+                }
+            }
+
+            yield return new WaitForSeconds(wallChangeDelay);
+        }
+
+        Debug.Log("Transformación de paredes completada.");
+    }
+    
 }
+
