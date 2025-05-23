@@ -36,6 +36,10 @@ Como último paso hasta ahora, configuré que, además de seguir al jugador, al 
 - Reemplazar el sprite estático de suelo y paredes por un array de sprites colocados aleatoriamente
 - Añadir una escena final
 - Pasar de nivel conservando estadísticas, incluyendo la vida restante
+- Minimapa para la dungeon y el coliseo
+- Nuevo nivel "Coliseo"
+- Cambio de tiles de paredes simulando "limpieza del nivel"
+- Interfaz de pausa y joysticks configurados y diseñados"
 
 ---
 
