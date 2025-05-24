@@ -98,7 +98,11 @@ public class MapMaker : MonoBehaviour
                 }
             }
         }
+
+        // ⚠️ Fuerza la actualización del collider
+        RefreshWallColliders();
     }
+
 
     void SpawnPlayer()
     {
@@ -287,6 +291,32 @@ public class MapMaker : MonoBehaviour
 
         Debug.Log("Transformación de paredes completada.");
     }
+
+    void RefreshWallColliders()
+    {
+        TilemapCollider2D tileCol = wallTilemap.GetComponent<TilemapCollider2D>();
+        if (tileCol != null)
+        {
+            tileCol.enabled = false;
+            tileCol.enabled = true;
+        }
+
+        CompositeCollider2D compCol = wallTilemap.GetComponent<CompositeCollider2D>();
+        if (compCol != null)
+        {
+            compCol.geometryType = CompositeCollider2D.GeometryType.Polygons;
+            compCol.generationType = CompositeCollider2D.GenerationType.Synchronous;
+        }
+
+        Rigidbody2D rb = wallTilemap.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.simulated = false;
+            rb.simulated = true;
+        }
+
+        Debug.Log("Collider de paredes actualizado.");
+    }
+
     
 }
-
