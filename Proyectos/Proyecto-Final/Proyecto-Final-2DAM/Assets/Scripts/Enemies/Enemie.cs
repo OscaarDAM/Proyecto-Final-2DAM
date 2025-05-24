@@ -23,6 +23,16 @@ public class EnemyFollow : MonoBehaviour
     private float patrolCooldown;
     private float patrolTimer = 0f;
 
+    // === NUEVAS VARIABLES PARA DISPARO ===
+    public GameObject projectilePrefab;
+    public Transform firePoint;
+
+    private bool isShooting = false;
+    private float shootCooldown = 2f;
+    private float lastShotTime = 0f;
+    private float exitShootAreaTimer = 0f;
+    private bool waitingAfterExit = false;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -76,6 +86,29 @@ public class EnemyFollow : MonoBehaviour
         else
         {
             currentState = EnemyState.Chasing;
+        }
+
+        // === SI ESTÁ DISPARANDO, SE QUEDA QUIETO Y DISPARA ===
+        if (isShooting)
+        {
+            ShootAtPlayer();
+            return;
+        }
+
+        // === SI SALIÓ DEL ÁREA DE DISPARO, ESPERA 2 SEGUNDOS ANTES DE VOLVER A PERSEGUIR ===
+        if (waitingAfterExit)
+        {
+            exitShootAreaTimer += Time.fixedDeltaTime;
+            if (exitShootAreaTimer >= 2f)
+            {
+                waitingAfterExit = false;
+                currentState = EnemyState.Chasing;
+            }
+            else
+            {
+                rb.velocity = Vector2.zero;
+                return;
+            }
         }
 
         switch (currentState)
@@ -179,4 +212,53 @@ public class EnemyFollow : MonoBehaviour
         Debug.Log("El enemigo ha sido destruido.");
         Destroy(gameObject);
     }
+
+    // === NUEVOS MÉTODOS PARA DISPARO ===
+
+    public void SetShooting(bool value)
+    {
+        isShooting = value;
+        if (value)
+        {
+            rb.velocity = Vector2.zero;
+        }
+    }
+
+    public void OnExitShootingArea()
+    {
+        isShooting = false;
+        waitingAfterExit = true;
+        exitShootAreaTimer = 0f;
+    }
+
+    private void ShootAtPlayer()
+{
+    if (player == null || projectilePrefab == null || firePoint == null) return;
+
+    rb.velocity = Vector2.zero;
+
+    if (Time.time - lastShotTime >= shootCooldown)
+    {
+        Vector2 dir = (player.position - transform.position).normalized;
+
+        GameObject bullet = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+
+        // Ignorar colisión con el enemigo
+        Collider2D bulletCollider = bullet.GetComponent<Collider2D>();
+        Collider2D enemyCollider = GetComponent<Collider2D>();
+        if (bulletCollider != null && enemyCollider != null)
+        {
+            Physics2D.IgnoreCollision(bulletCollider, enemyCollider);
+        }
+
+        Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
+        if (bulletRb != null)
+        {
+            bulletRb.velocity = dir * 5f; // Velocidad hacia el jugador
+        }
+
+        lastShotTime = Time.time;
+    }
 }
+
+}  
