@@ -7,24 +7,25 @@ public class PlayerJoystickMove : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 movement;
 
-    public Joystick joystick; // Se asignará por código
-
+    public Joystick joystick;
     public int health = 3;
     private bool isDead = false;
 
     public GameOverManager gameOverManager;
 
+    private Animator animator;
+    private bool isFacingRight = true;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
 
-        // Asignar joystick automáticamente si no está asignado en el Inspector
         if (joystick == null)
         {
             joystick = FindObjectOfType<FixedJoystick>();
         }
 
-        // También buscar GameOverManager si no se asignó
         if (gameOverManager == null)
         {
             gameOverManager = FindObjectOfType<GameOverManager>();
@@ -38,17 +39,23 @@ public class PlayerJoystickMove : MonoBehaviour
         if (joystick != null)
         {
             movement = new Vector2(joystick.Horizontal, joystick.Vertical).normalized;
+
+            // Actualizar dirección si hay movimiento horizontal
+            if (Mathf.Abs(movement.x) > 0.01f)
+            {
+                isFacingRight = movement.x > 0;
+            }
+
+            // Actualizar animaciones
+            bool isWalking = movement.magnitude > 0.1f;
+
+            // Esto activa los parámetros que controlan las 4 animaciones
+            animator.SetBool("isWalking", isWalking);
+            animator.SetBool("isFacingRight", isFacingRight);
         }
 
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            health = 0;
-        }
-
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            health--;
-        }
+        if (Input.GetKeyDown(KeyCode.K)) health = 0;
+        if (Input.GetKeyDown(KeyCode.J)) health--;
 
         if (health <= 0 && !isDead)
         {

@@ -22,7 +22,14 @@ public class RoomTrigger : MonoBehaviour
         {
             Debug.Log("PLAYER ENTRÓ AL TRIGGER");
             foreach (var enemy in roomEnemies)
-                if (enemy != null) enemy.SetCanFollow(true);
+    {
+        if (enemy != null)
+        {
+            enemy.SetCanFollow(true);
+            enemy.SetShooting(true);
+        }
+    }
+
 
             StartBlocking();
             StartCoroutine(CheckEnemiesCoroutine());
