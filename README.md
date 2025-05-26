@@ -40,14 +40,15 @@ Como último paso hasta ahora, configuré que, además de seguir al jugador, al 
 - Nuevo nivel "Coliseo"
 - Cambio de tiles de paredes simulando "limpieza del nivel"
 - Interfaz de pausa y joysticks configurados y diseñados"
+- Crear objetos de curación
+- Crear diferentes tipos de mecánicas de ataque para los enemigos  
+- Crear animaciones de movimiento y ataque
 
 ---
 
 ## Futuras implementaciones
 
-- Quitar vida a enemigos con armas  
-- Crear diferentes tipos de mecánicas de ataque para los enemigos  
-- Crear animaciones de movimiento y ataque   
+- Quitar vida a enemigos con armas     
 - Crear armas para el juego  
 - Crear efectos visuales y de sonido  
-- Crear objetos de curación y velocidad  
+
