@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyClickHandler : MonoBehaviour
 {
-    public float damageAmount = 10f;  // Daño que se aplicará al enemigo
+    public float damageAmount = 100000f;  // Daño que se aplicará al enemigo
 
     void Update()
     {

@@ -184,7 +184,7 @@ Animator:
   m_GameObject: {fileID: 3123050266635465996}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7ab55d0df23d84543b401d43a1387822, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7553269c07f7d9547a8eb2fae1df5aca, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -276,6 +276,8 @@ MonoBehaviour:
     m_Extent: {x: 0, y: 0, z: 0}
   projectilePrefab: {fileID: 6463122764054985619, guid: 1780603aae6557d4cbd9d642a10316f9, type: 3}
   firePoint: {fileID: 3506072134510744737}
+  potionPrefab: {fileID: 6574618677997410089, guid: ad15d222ff405ed4da867e2f09c096fc, type: 3}
+  dropChance: 0.3
 --- !u!1 &5506381861743524214
 GameObject:
   m_ObjectHideFlags: 0

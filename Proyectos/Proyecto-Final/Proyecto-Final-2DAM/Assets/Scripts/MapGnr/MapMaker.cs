@@ -5,13 +5,15 @@ using UnityEngine.Tilemaps;
 
 public class MapMaker : MonoBehaviour
 {
-    // Tilemaps para el suelo y las paredes
+    // Tilemaps para el suelo, paredes y fondo
     public Tilemap floorTilemap;
     public Tilemap wallTilemap;
+    public Tilemap backgroundTilemap;
 
-    // Tiles para el suelo y las paredes
+    // Tiles para el suelo, paredes y fondo
     public TileBase[] floorTiles;
     public TileBase[] wallTiles;
+    public TileBase backgroundTile;
 
     // Dimensiones del mapa
     public int mapWidth = 32;
@@ -75,7 +77,7 @@ public class MapMaker : MonoBehaviour
         SpawnEnemies();
     }
 
-    void GenerateTiles(List<TileBase> floorPattern)
+        void GenerateTiles(List<TileBase> floorPattern)
     {
         floorTilemap.ClearAllTiles();
         wallTilemap.ClearAllTiles();
@@ -86,6 +88,7 @@ public class MapMaker : MonoBehaviour
             for (int j = 0; j < mapHeight; j++)
             {
                 Vector3Int pos = new Vector3Int(i, j, 0);
+
                 switch (mapData[i, j])
                 {
                     case 0:
@@ -95,13 +98,16 @@ public class MapMaker : MonoBehaviour
                     case 1:
                         wallTilemap.SetTile(pos, currentWallTile);
                         break;
+                    default:
+                        // Rellenar huecos vacíos con tile de fondo
+                        if (backgroundTile != null)
+                            backgroundTilemap.SetTile(pos, backgroundTile);
+                        break;
                 }
             }
         }
-
-        // ⚠️ Fuerza la actualización del collider
-        RefreshWallColliders();
     }
+
 
 
     void SpawnPlayer()
@@ -294,28 +300,31 @@ public class MapMaker : MonoBehaviour
 
     void RefreshWallColliders()
     {
-        TilemapCollider2D tileCol = wallTilemap.GetComponent<TilemapCollider2D>();
-        if (tileCol != null)
-        {
-            tileCol.enabled = false;
-            tileCol.enabled = true;
-        }
+        /* TilemapCollider2D tileCol = wallTilemap.GetComponent<TilemapCollider2D>();
+         if (tileCol != null)
+         {
+             tileCol.enabled = false;
+             tileCol.enabled = true;
+         }
 
-        CompositeCollider2D compCol = wallTilemap.GetComponent<CompositeCollider2D>();
-        if (compCol != null)
-        {
-            compCol.geometryType = CompositeCollider2D.GeometryType.Polygons;
-            compCol.generationType = CompositeCollider2D.GenerationType.Synchronous;
-        }
+         CompositeCollider2D compCol = wallTilemap.GetComponent<CompositeCollider2D>();
+         if (compCol != null)
+         {
+             compCol.geometryType = CompositeCollider2D.GeometryType.Polygons;
+             compCol.generationType = CompositeCollider2D.GenerationType.Synchronous;
+         }
 
-        Rigidbody2D rb = wallTilemap.GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            rb.simulated = false;
-            rb.simulated = true;
-        }
+         Rigidbody2D rb = wallTilemap.GetComponent<Rigidbody2D>();
+         if (rb != null)
+         {
+             rb.simulated = false;
+             rb.simulated = true;
+         }
 
-        Debug.Log("Collider de paredes actualizado.");
+         Debug.Log("Collider de paredes actualizado."); */
+        
+        wallTilemap.CompressBounds();
+        
     }
 
     

@@ -33,6 +33,10 @@ public class EnemyFollow : MonoBehaviour
     private float exitShootAreaTimer = 0f;
     private bool waitingAfterExit = false;
 
+    // === NUEVA VARIABLE PARA SOLTAR POCIÓN ===
+    public GameObject potionPrefab; // Prefab de la poción asignado desde el inspector
+    [Range(0f, 1f)] public float dropChance = 0.3f; // Probabilidad de soltar poción (30%)
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -210,6 +214,13 @@ public class EnemyFollow : MonoBehaviour
     private void KillEnemy()
     {
         Debug.Log("El enemigo ha sido destruido.");
+
+        // === SOLTAR POCIÓN DE FORMA ALEATORIA ===
+        if (potionPrefab != null && Random.value < dropChance)
+        {
+            Instantiate(potionPrefab, transform.position, Quaternion.identity);
+        }
+
         Destroy(gameObject);
     }
 
@@ -232,33 +243,32 @@ public class EnemyFollow : MonoBehaviour
     }
 
     private void ShootAtPlayer()
-{
-    if (player == null || projectilePrefab == null || firePoint == null) return;
-
-    rb.velocity = Vector2.zero;
-
-    if (Time.time - lastShotTime >= shootCooldown)
     {
-        Vector2 dir = (player.position - transform.position).normalized;
+        if (player == null || projectilePrefab == null || firePoint == null) return;
 
-        GameObject bullet = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+        rb.velocity = Vector2.zero;
 
-        // Ignorar colisión con el enemigo
-        Collider2D bulletCollider = bullet.GetComponent<Collider2D>();
-        Collider2D enemyCollider = GetComponent<Collider2D>();
-        if (bulletCollider != null && enemyCollider != null)
+        if (Time.time - lastShotTime >= shootCooldown)
         {
-            Physics2D.IgnoreCollision(bulletCollider, enemyCollider);
-        }
+            Vector2 dir = (player.position - transform.position).normalized;
 
-        Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
-        if (bulletRb != null)
-        {
-            bulletRb.velocity = dir * 5f; // Velocidad hacia el jugador
-        }
+            GameObject bullet = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
 
-        lastShotTime = Time.time;
+            // Ignorar colisión con el enemigo
+            Collider2D bulletCollider = bullet.GetComponent<Collider2D>();
+            Collider2D enemyCollider = GetComponent<Collider2D>();
+            if (bulletCollider != null && enemyCollider != null)
+            {
+                Physics2D.IgnoreCollision(bulletCollider, enemyCollider);
+            }
+
+            Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
+            if (bulletRb != null)
+            {
+                bulletRb.velocity = dir * 5f; // Velocidad hacia el jugador
+            }
+
+            lastShotTime = Time.time;
+        }
     }
 }
-
-}  

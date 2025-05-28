@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 public class BarraVida : MonoBehaviour
 {
-    public Image barraVida;
-    private PlayerJoystickMove playerMove;
-    private float vidaMaxima;
+    public Image barraVida; // Imagen que representa la barra de vida
+    private PlayerJoystickMove playerMove; // Referencia al script del jugador
+    private float vidaMaxima; // Vida máxima del jugador
 
     void Update()
     {
@@ -16,7 +16,7 @@ public class BarraVida : MonoBehaviour
             if (player != null)
             {
                 playerMove = player.GetComponent<PlayerJoystickMove>();
-                vidaMaxima = playerMove.health;
+                vidaMaxima = playerMove.maxHealth; // Obtenemos la vida máxima
             }
         }
 
