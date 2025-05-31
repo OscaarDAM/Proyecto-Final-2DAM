@@ -16,7 +16,13 @@ public class MenuController : MonoBehaviour
 
     [Header("Audio")]
     public AudioClip sonidoBoton;
+    public AudioClip sonidoCamion; // 🎵 Sonido de camión arrancando
     private AudioSource audioSource;
+
+    [Header("Camión")]
+    public GameObject camion; // 🚚 Referencia al objeto del camión
+    public float distanciaMovimiento = 10f; // Cuánto se moverá el camión hacia la derecha
+    public float duracionMovimiento = 2f;   // Tiempo que tardará en moverse
 
     private bool hasTapped = false;
 
@@ -102,30 +108,64 @@ public class MenuController : MonoBehaviour
         }
     }
 
+    private void ReproducirSonidoCamion()
+    {
+        if (sonidoCamion != null)
+        {
+            audioSource.PlayOneShot(sonidoCamion);
+        }
+    }
+
     public void SalirDelJuego()
     {
         ReproducirSonido();
         Application.Quit();
     }
 
-    public void CambiarAScena(string nombreEscena)
+    // 🟢 Nuevo método que se llama desde el botón "Jugar"
+    public void IniciarJuego(string nombreEscena)
     {
-        ReproducirSonido();
+        StartCoroutine(SecuenciaInicioJuego(nombreEscena));
+    }
 
-        // Si tienes un sistema de transición tipo fade
+    // ⏱️ Corrutina que maneja la secuencia: sonido, ocultar UI, mover camión, cambiar de escena
+    private IEnumerator SecuenciaInicioJuego(string nombreEscena)
+    {
+        ReproducirSonidoCamion();
+
+        // 🔻 Ocultar elementos con fade usando LeanTween
+        OcultarElemento(title);
+        OcultarElemento(buttonJugar);
+        OcultarElemento(buttonOpciones);
+        OcultarElemento(buttonCreditos);
+        OcultarElemento(buttonSalir);
+
+        // ⏳ Esperar 6 segundos antes de mover el camión
+        yield return new WaitForSeconds(6f);
+
+        // 🚚 Mover el camión hacia la derecha
+        Vector3 destino = camion.transform.position + Vector3.right * distanciaMovimiento;
+        LeanTween.move(camion, destino, duracionMovimiento).setEase(LeanTweenType.easeInOutSine);
+
+        // ⌛ Esperar a que termine el movimiento
+        yield return new WaitForSeconds(duracionMovimiento);
+
+        // 🔁 Transición final a la nueva escena
         TransicionEscenasUI.Instance.DisolverSalida(() =>
         {
             PlayerPrefs.SetInt("Level", 1);
             SceneManager.LoadScene(nombreEscena);
         });
-
-        // Si NO tienes sistema de transición, usa este:
-        // StartCoroutine(CargarEscenaDespuesDeSonido(nombreEscena));
     }
 
-    private IEnumerator CargarEscenaDespuesDeSonido(string nombreEscena)
+    // 🔻 Ocultar cualquier GameObject con CanvasGroup usando LeanTween
+    private void OcultarElemento(GameObject elemento)
     {
-        yield return new WaitForSeconds(sonidoBoton != null ? sonidoBoton.length : 0);
-        SceneManager.LoadScene(nombreEscena);
+        CanvasGroup cg = elemento.GetComponent<CanvasGroup>();
+        if (cg != null)
+        {
+            LeanTween.alphaCanvas(cg, 0f, 0.5f).setEase(LeanTweenType.easeInCubic)
+                     .setOnComplete(() => elemento.SetActive(false));
+        }
     }
 }
