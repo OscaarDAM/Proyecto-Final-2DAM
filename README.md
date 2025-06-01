@@ -36,14 +36,19 @@ Como último paso hasta ahora, configuré que, además de seguir al jugador, al 
 - Reemplazar el sprite estático de suelo y paredes por un array de sprites colocados aleatoriamente
 - Añadir una escena final
 - Pasar de nivel conservando estadísticas, incluyendo la vida restante
+- Minimapa para la dungeon y el coliseo
+- Nuevo nivel "Coliseo"
+- Cambio de tiles de paredes simulando "limpieza del nivel"
+- Interfaz de pausa y joysticks configurados y diseñados"
+- Crear objetos de curación
+- Crear diferentes tipos de mecánicas de ataque para los enemigos  
+- Crear animaciones de movimiento y ataque
 
 ---
 
 ## Futuras implementaciones
 
-- Quitar vida a enemigos con armas  
-- Crear diferentes tipos de mecánicas de ataque para los enemigos  
-- Crear animaciones de movimiento y ataque   
+- Quitar vida a enemigos con armas     
 - Crear armas para el juego  
 - Crear efectos visuales y de sonido  
-- Crear objetos de curación y velocidad  
+
