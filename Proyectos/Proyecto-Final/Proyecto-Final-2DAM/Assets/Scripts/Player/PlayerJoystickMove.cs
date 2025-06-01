@@ -15,7 +15,7 @@ public class PlayerJoystickMove : MonoBehaviour
     public GameOverManager gameOverManager;
 
     private Animator animator;
-    private SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
 
     void Start()
     {
