@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6502595810095439729}
   - component: {fileID: 557478572776068159}
   - component: {fileID: 6368076072543369759}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 503
+    m_Bits: 3575
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -92,6 +92,37 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2193098063213068671}
   m_Enabled: 1
+--- !u!1 &3192694600519570449
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6567718259087509504}
+  m_Layer: 0
+  m_Name: Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6567718259087509504
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3192694600519570449}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.013, y: -0.035, z: 0}
+  m_LocalScale: {x: 1.06119, y: 1.0884, z: 1.0884}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1769896731125204976}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4485857929323850799
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +139,7 @@ GameObject:
   - component: {fileID: 1766606677766167754}
   - component: {fileID: 3196502145882139034}
   - component: {fileID: 836646959537347425}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Model
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -315,14 +346,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponHolder: {fileID: 261616541733824658}
   broom: {fileID: 1769896731125204976}
-  playerSprite: {fileID: 0}
-  aimRotationSpeed: 15
-  attackDistance: 1
-  attackDuration: 0.2
+  tipPoint: {fileID: 6567718259087509504}
+  playerSprite: {fileID: 4544657489726822641}
+  aimRotationSpeed: 2
+  attackDistance: 1.5
+  attackDuration: 0.3
+  damage: 1000
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
-  damage: 1
+    m_Bits: 1024
 --- !u!1 &7371468503365780168
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,7 +450,7 @@ GameObject:
   - component: {fileID: 1769896731125204976}
   - component: {fileID: 848267746951629999}
   - component: {fileID: 5317264282509623631}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Mocho
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -434,10 +466,11 @@ Transform:
   m_GameObject: {fileID: 7674382455562696884}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.70822775, w: 0.7059841}
-  m_LocalPosition: {x: 0.082, y: 0.119, z: 0}
+  m_LocalPosition: {x: -0.383, y: -0.059, z: 0}
   m_LocalScale: {x: 0.9647847, y: 0.8988694, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6567718259087509504}
   m_Father: {fileID: 261616541733824658}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90.182}
 --- !u!212 &848267746951629999
@@ -546,7 +579,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 261616541733824658}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: WeaponHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -562,7 +595,7 @@ Transform:
   m_GameObject: {fileID: 7695743661552463486}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.445, y: -0.148, z: 0}
+  m_LocalPosition: {x: -0.003, y: 0.085, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -578,7 +611,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8654897753902209667}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Human
   m_TagString: Untagged
   m_Icon: {fileID: 0}

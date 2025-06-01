@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 5353351431977834071}
   - component: {fileID: 4102096141343864819}
   - component: {fileID: 8537965821022711451}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Model
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -287,7 +287,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3506072134510744737}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Firepoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318,9 +318,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3529415367385705177}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GermenVerde
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

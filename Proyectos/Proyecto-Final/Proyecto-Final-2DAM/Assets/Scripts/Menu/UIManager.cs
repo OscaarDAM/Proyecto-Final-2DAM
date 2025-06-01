@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
@@ -9,16 +10,26 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        // Busca el jugador en la escena (por ejemplo por tag)
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-        {
-            playerCombat = player.GetComponent<PlayerCombat>();
-        }
+        StartCoroutine(AssignPlayerCombatCoroutine());
+    }
 
-        if (attackButton != null && playerCombat != null)
+    IEnumerator AssignPlayerCombatCoroutine()
+    {
+        // Esperar hasta que el jugador exista y tenga PlayerCombat
+        while (playerCombat == null)
         {
-            attackButton.onClick.AddListener(() => playerCombat.TriggerAttack());
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                playerCombat = player.GetComponent<PlayerCombat>();
+                if (playerCombat != null && attackButton != null)
+                {
+                    attackButton.onClick.RemoveAllListeners();
+                    attackButton.onClick.AddListener(() => playerCombat.TriggerAttack());
+                    Debug.Log("Listener asignado al botón de ataque");
+                }
+            }
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }
