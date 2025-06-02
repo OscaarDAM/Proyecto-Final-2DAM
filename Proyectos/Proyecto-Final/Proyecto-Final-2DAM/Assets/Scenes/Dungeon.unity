@@ -2023,7 +2023,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 7709753976026460508, guid: a036812595c730847b9a83030571ada7, type: 3}
   allEnemies: []
   specialTile: {fileID: 11400000, guid: 0fc795f6fc0464e40abf6efb58006c17, type: 2}
-  specialTileSound: {fileID: 8300000, guid: 258c7fbc4af87c84ba73eafd235275ff, type: 3}
+  specialTileSound: {fileID: 8300000, guid: f8e298ef3a8a8b343aed4354291d4e16, type: 3}
   cleanWallTile: {fileID: 11400000, guid: 47bacd4da9cabc541bbdbb1a5d161270, type: 2}
   wallChangeDelay: 0.02
 --- !u!1 &1127565771
@@ -90044,7 +90044,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -38, y: -26}
   m_SizeDelta: {x: 513.6845, y: 489.625}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &2056317816
@@ -90394,6 +90394,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 603351837018084215, guid: 3c98c67004590844290494bc444edc74, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -38
+      objectReference: {fileID: 0}
+    - target: {fileID: 603351837018084215, guid: 3c98c67004590844290494bc444edc74, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -26
+      objectReference: {fileID: 0}
     - target: {fileID: 793660784406289975, guid: 3c98c67004590844290494bc444edc74, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

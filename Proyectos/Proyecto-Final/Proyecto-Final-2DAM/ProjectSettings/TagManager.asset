@@ -11,7 +11,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Camion
   - Water
   - UI
   - Button
@@ -43,6 +43,12 @@ TagManager:
   m_SortingLayers:
   - name: Button
     uniqueID: 786359973
+    locked: 0
+  - name: Camion
+    uniqueID: 3162249757
+    locked: 0
+  - name: FX
+    uniqueID: 2470725501
     locked: 0
   - name: Background
     uniqueID: 435918265

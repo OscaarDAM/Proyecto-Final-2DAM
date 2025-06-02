@@ -31,6 +31,7 @@ public class MenuController : MonoBehaviour
     public GameObject camion; // 🚚 Referencia al objeto del camión
     public float distanciaMovimiento = 10f; // Cuánto se moverá el camión hacia la derecha
     public float duracionMovimiento = 2f;   // Tiempo que tardará en moverse
+    public ParticleSystem humoCamion; // 🌫️ Sistema de partículas para el humo del camión
 
     private bool hasTapped = false;
     private bool animacionEnCurso = false; // 🔄 Para saber si la animación de inicio ya empezó
@@ -60,12 +61,19 @@ public class MenuController : MonoBehaviour
         {
             audioSourceMusica.clip = musicaFondo;
             audioSourceMusica.loop = true;
+
+            // ✅ Cargar volumen guardado para música
+            float volMusica = PlayerPrefs.GetFloat("VolumenMusica", 0.5f);
+            audioSourceMusica.volume = volMusica;
+            sliderMusica.value = volMusica;
+
             audioSourceMusica.Play();
         }
 
-        // Inicializar sliders con el volumen actual
-        sliderSonidos.value = audioSourceSonidos.volume;
-        sliderMusica.value = audioSourceMusica.volume;
+        // ✅ Cargar volumen guardado para sonidos
+        float volSonidos = PlayerPrefs.GetFloat("VolumenSonidos", 0.5f);
+        audioSourceSonidos.volume = volSonidos;
+        sliderSonidos.value = volSonidos;
 
         // Añadir listeners
         sliderSonidos.onValueChanged.AddListener(ActualizarVolumenSonidos);
@@ -184,12 +192,24 @@ public class MenuController : MonoBehaviour
         // ⏳ Esperar 6 segundos antes de mover el camión
         yield return new WaitForSeconds(6f);
 
+        // 🌫️ Activar humo del camión
+        if (humoCamion != null)
+        {
+            humoCamion.Play();
+        }
+
         // 🚚 Mover el camión hacia la derecha
         Vector3 destino = camion.transform.position + Vector3.right * distanciaMovimiento;
         LeanTween.move(camion, destino, duracionMovimiento).setEase(LeanTweenType.easeInOutSine);
 
         // ⌛ Esperar a que termine el movimiento
         yield return new WaitForSeconds(duracionMovimiento);
+
+        // ⛔ Detener humo (opcional)
+        if (humoCamion != null)
+        {
+            humoCamion.Stop();
+        }
 
         // 🔁 Transición final a la nueva escena
         TransicionEscenasUI.Instance.DisolverSalida(() =>
@@ -241,10 +261,14 @@ public class MenuController : MonoBehaviour
     private void ActualizarVolumenSonidos(float valor)
     {
         audioSourceSonidos.volume = valor;
+        PlayerPrefs.SetFloat("VolumenSonidos", valor); // ✅ Guardar
+        PlayerPrefs.Save();
     }
 
     private void ActualizarVolumenMusica(float valor)
     {
         audioSourceMusica.volume = valor;
+        PlayerPrefs.SetFloat("VolumenMusica", valor); // ✅ Guardar
+        PlayerPrefs.Save();
     }
 }
