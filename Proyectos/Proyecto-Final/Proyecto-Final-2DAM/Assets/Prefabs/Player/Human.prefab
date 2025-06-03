@@ -72,7 +72,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 3575
+    m_Bits: 15863
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 8409348317716965227}
   - component: {fileID: 1766606677766167754}
   - component: {fileID: 3196502145882139034}
-  - component: {fileID: 836646959537347425}
+  - component: {fileID: 5978689615325856208}
   m_Layer: 11
   m_Name: Model
   m_TagString: Player
@@ -332,7 +332,8 @@ MonoBehaviour:
   health: 20
   gameOverManager: {fileID: 0}
   spriteRenderer: {fileID: 0}
---- !u!114 &836646959537347425
+  bounceForce: 4
+--- !u!114 &5978689615325856208
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -351,7 +352,7 @@ MonoBehaviour:
   aimRotationSpeed: 2
   attackDistance: 1.5
   attackDuration: 0.3
-  damage: 1000
+  damage: 3
   enemyLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -452,7 +453,7 @@ GameObject:
   - component: {fileID: 5317264282509623631}
   m_Layer: 0
   m_Name: Mocho
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -554,7 +555,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.26148084, y: -0.032855526}

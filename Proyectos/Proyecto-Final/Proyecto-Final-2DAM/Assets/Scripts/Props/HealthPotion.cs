@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class HealthPotion : MonoBehaviour
 {
-    public int healAmount = 20; // Cuánta vida cura la poción
     private bool isCollected = false; // Para evitar múltiples recogidas
 
     private SpriteRenderer sr; // Referencia al SpriteRenderer
@@ -52,7 +51,8 @@ public class HealthPotion : MonoBehaviour
 
             if (player != null)
             {
-                player.Heal(healAmount); // Curamos al jugador
+                int randomHeal = Random.Range(3, 7); // Curación aleatoria entre 3 y 6
+                player.Heal(randomHeal); // Curamos al jugador
                 isCollected = true;
 
                 // Reproducir sonido si hay uno asignado

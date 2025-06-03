@@ -270,11 +270,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  health: 100
+  health: 6
   roomBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  projectilePrefab: {fileID: 6463122764054985619, guid: 1780603aae6557d4cbd9d642a10316f9, type: 3}
+  projectilePrefab: {fileID: 6463122764054985619, guid: b77d95a30f9224b4bb3e96630ff273b7, type: 3}
   firePoint: {fileID: 3506072134510744737}
   potionPrefab: {fileID: 6574618677997410089, guid: ad15d222ff405ed4da867e2f09c096fc, type: 3}
   dropChance: 0.3
