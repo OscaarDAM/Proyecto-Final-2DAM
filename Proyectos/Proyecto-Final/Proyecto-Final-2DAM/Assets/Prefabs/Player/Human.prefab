@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6502595810095439729}
   - component: {fileID: 557478572776068159}
   - component: {fileID: 6368076072543369759}
+  - component: {fileID: 2572798322211280059}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -92,6 +93,18 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2193098063213068671}
   m_Enabled: 1
+--- !u!114 &2572798322211280059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2193098063213068671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2c55040d37c2a4e912cdf5ccdc00af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3192694600519570449
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,6 +346,7 @@ MonoBehaviour:
   gameOverManager: {fileID: 0}
   spriteRenderer: {fileID: 0}
   bounceForce: 4
+  cameraShake: {fileID: 2572798322211280059}
 --- !u!114 &5978689615325856208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,7 +361,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponHolder: {fileID: 261616541733824658}
   broom: {fileID: 1769896731125204976}
-  tipPoint: {fileID: 6567718259087509504}
   playerSprite: {fileID: 4544657489726822641}
   aimRotationSpeed: 2
   attackDistance: 1.5

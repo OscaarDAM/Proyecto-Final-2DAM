@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerJoystickMove : MonoBehaviour
 {
@@ -28,6 +29,8 @@ public class PlayerJoystickMove : MonoBehaviour
     // 🔴 VARIABLES PARA CAMBIO DE COLOR AL RECIBIR DAÑO
     private Color originalColor;
     private Coroutine flashCoroutine;
+
+    public CameraShake cameraShake;
 
     void Start()
     {
@@ -121,6 +124,11 @@ public class PlayerJoystickMove : MonoBehaviour
 
             // Aplica daño al jugador
             health--;
+
+            if (cameraShake != null)
+            {
+                StartCoroutine(cameraShake.Shake(0.15f, 0.1f)); // 💥 Shake al recibir daño
+            }
 
             // 🔴 Efecto visual al recibir daño
             if (flashCoroutine != null)
