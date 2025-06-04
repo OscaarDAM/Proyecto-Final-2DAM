@@ -11,6 +11,9 @@ public class PlayerCombat : MonoBehaviour
     public int damage = 1000;
     public LayerMask enemyLayer;
 
+    public AudioSource audioSource;        // AUDIO SOURCE para reproducir sonido
+    public AudioClip sonidoGolpe;          // CLIP con sonido de golpe
+
     private bool isAttacking = false;
     private Vector3 originalLocalPosition;
     private PlayerJoystickMove movementScript;
@@ -26,8 +29,13 @@ public class PlayerCombat : MonoBehaviour
 
         if (broomCollider != null)
         {
-            broomCollider.isTrigger = true;  // Muy importante
-            broomCollider.enabled = false;   // Collider desactivado fuera del ataque
+            broomCollider.isTrigger = true;  
+            broomCollider.enabled = false;
+        }
+
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>(); // Por si no asignas uno en inspector
         }
     }
 
@@ -40,7 +48,6 @@ public class PlayerCombat : MonoBehaviour
             lastAimDirection = moveInput.normalized;
         }
 
-        // Ajuste posición y escala del arma (igual que antes)
         Vector3 weaponPos = weaponHolder.localPosition;
         weaponPos.x = Mathf.Abs(weaponPos.x) * (movementScript.spriteRenderer.flipX ? -1 : 1);
         weaponHolder.localPosition = weaponPos;
@@ -70,8 +77,14 @@ public class PlayerCombat : MonoBehaviour
     {
         isAttacking = true;
 
+        // Reproducir sonido golpe
+        if (sonidoGolpe != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(sonidoGolpe);
+        }
+
         if (broomCollider != null)
-            broomCollider.enabled = true;  // Activamos collider trigger
+            broomCollider.enabled = true;
 
         Vector2 attackDirection = lastAimDirection;
         float angle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
@@ -88,7 +101,6 @@ public class PlayerCombat : MonoBehaviour
             yield return null;
         }
 
-        // Volver el arma a posición original
         float returnDuration = 0.1f;
         elapsed = 0f;
         Vector3 current = broom.localPosition;
@@ -102,18 +114,20 @@ public class PlayerCombat : MonoBehaviour
         broom.localPosition = originalLocalPosition;
 
         if (broomCollider != null)
-            broomCollider.enabled = false;  // Desactivamos collider fuera del ataque
+            broomCollider.enabled = false;
 
         weaponHolder.rotation = Quaternion.identity;
+
+        // ESPERA para cooldown (0.5 segundos) antes de poder volver a atacar
+        yield return new WaitForSeconds(0.5f);
+
         isAttacking = false;
     }
 
-    // Aquí detectamos enemigos al entrar en el trigger del arma
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!isAttacking) return;  // Solo dañamos si estamos atacando
+        if (!isAttacking) return;
 
-        // Comprobamos si está en la capa de enemigos
         if (((1 << other.gameObject.layer) & enemyLayer) != 0)
         {
             if (other.CompareTag("Enemy"))

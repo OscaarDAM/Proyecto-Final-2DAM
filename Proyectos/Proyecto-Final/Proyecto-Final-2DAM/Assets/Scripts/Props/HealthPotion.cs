@@ -2,18 +2,19 @@ using UnityEngine;
 
 public class HealthPotion : MonoBehaviour
 {
-    private bool isCollected = false; // Para evitar múltiples recogidas
+    private bool isCollected = false;
 
-    private SpriteRenderer sr; // Referencia al SpriteRenderer
+    private SpriteRenderer sr;
     private Vector3 originalScale;
-    private Vector3 startPos; // Posición inicial para el efecto de flotación
+    private Vector3 startPos;
 
-    public float floatAmplitude = 0.1f; // Cuánto se eleva y baja la poción
-    public float floatFrequency = 1f; // Qué tan rápido flota
+    public float floatAmplitude = 0.1f;
+    public float floatFrequency = 1f;
 
-    public GameObject healEffectPrefab; // Prefab de partículas (opcional)
-    public AudioClip pickupSound; // Sonido al recoger la poción (opcional)
-    private AudioSource audioSource;
+    public GameObject healEffectPrefab;
+    public AudioClip pickupSound;
+
+    public AudioSource audioSource;
 
     void Start()
     {
@@ -21,26 +22,26 @@ public class HealthPotion : MonoBehaviour
         originalScale = transform.localScale;
         startPos = transform.position;
 
-        // Escala inicial cero para efecto pop
+        // Efecto de aparición
         transform.localScale = Vector3.zero;
-
-        // Lanzamos animación de aparición
         LeanTween.scale(gameObject, originalScale, 0.3f).setEaseOutBack();
 
-        // Aseguramos que haya un AudioSource
+        // Asegurar AudioSource
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
+
+        // Aplicar volumen desde AudioManager si existe
+        if (AudioManager.Instance != null)
+            audioSource.volume = AudioManager.Instance.VolumenSonidos;
     }
 
     void Update()
     {
-        // Efecto de flotación (arriba y abajo suavemente)
         float yOffset = Mathf.Sin(Time.time * floatFrequency) * floatAmplitude;
         transform.position = new Vector3(startPos.x, startPos.y + yOffset, startPos.z);
     }
 
-    // Cuando el jugador entra en el trigger de la poción
     void OnTriggerEnter2D(Collider2D other)
     {
         if (isCollected) return;
@@ -48,30 +49,29 @@ public class HealthPotion : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerJoystickMove player = other.GetComponent<PlayerJoystickMove>();
-
             if (player != null)
             {
-                int randomHeal = Random.Range(3, 7); // Curación aleatoria entre 3 y 6
-                player.Heal(randomHeal); // Curamos al jugador
+                int randomHeal = Random.Range(3, 7);
+                player.Heal(randomHeal);
                 isCollected = true;
 
-                // Reproducir sonido si hay uno asignado
+                // Reproducir sonido si hay clip
                 if (pickupSound != null)
                 {
                     audioSource.PlayOneShot(pickupSound);
                 }
 
-                // Instanciar efecto visual si está disponible
+                // Instanciar partículas
                 if (healEffectPrefab != null)
                 {
                     Instantiate(healEffectPrefab, transform.position, Quaternion.identity);
                 }
 
-                // Animación de desaparición
+                // Desaparecer visualmente
                 LeanTween.scale(gameObject, Vector3.zero, 0.2f).setEaseInBack();
                 LeanTween.alpha(gameObject, 0f, 0.2f).setOnComplete(() =>
                 {
-                    Destroy(gameObject); // Destruimos después del efecto
+                    Destroy(gameObject);
                 });
             }
         }

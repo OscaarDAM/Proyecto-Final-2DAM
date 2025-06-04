@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1898421431805958194}
   - component: {fileID: 623017521936837218}
   - component: {fileID: 9008557640618024235}
+  - component: {fileID: -2500370752458827758}
   m_Layer: 0
   m_Name: Pocion_Invencible
   m_TagString: Untagged
@@ -148,3 +149,16 @@ MonoBehaviour:
   immortalityEffectPrefab: {fileID: 0}
   pickupSound: {fileID: 8300000, guid: dc82e3c66d62b5c4a8437500a0477f83, type: 3}
   immortalityDuration: 5
+--- !u!114 &-2500370752458827758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2481753771284193787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4984431b5f1ab5498068098b29ae324, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tipoAudio: 1
