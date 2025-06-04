@@ -319,7 +319,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3529415367385705177}
   - component: {fileID: -2574426210298072189}
-  - component: {fileID: 2998935093765575540}
+  - component: {fileID: -7083061774204191314}
   m_Layer: 0
   m_Name: GermenVerde 12
   m_TagString: Untagged
@@ -370,7 +370,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &2998935093765575540
+--- !u!114 &-7083061774204191314
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -382,11 +382,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf4419ac1c60de8468ef6da183dae54b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 20
-  rotationSpeed: 20
-  attackCooldown: 0.5
   projectilePrefab: {fileID: 6463122764054985619, guid: 1780603aae6557d4cbd9d642a10316f9, type: 3}
-  projectileSpawnPoint: {fileID: 3529415367385705177}
-  chaseRange: 10
-  attackRange: 10
-  showDebugInfo: 1
+  shootCooldown: 1
+  projectileSpeed: 8
