@@ -15,21 +15,22 @@ public class RoomTrigger : MonoBehaviour
     public RectInt roomBounds;
 
     private bool isRoomCleared = false;
+    private bool playerLockedIn = false;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && !isRoomCleared)
+        if (other.CompareTag("Player") && !isRoomCleared && !playerLockedIn)
         {
             Debug.Log("PLAYER ENTRÓ AL TRIGGER");
-            foreach (var enemy in roomEnemies)
-    {
-        if (enemy != null)
-        {
-            enemy.SetCanFollow(true);
-            enemy.SetShooting(true);
-        }
-    }
 
+            foreach (var enemy in roomEnemies)
+            {
+                if (enemy != null)
+                {
+                    enemy.SetCanFollow(true);
+                    enemy.SetShooting(true);
+                }
+            }
 
             StartBlocking();
             StartCoroutine(CheckEnemiesCoroutine());
@@ -44,6 +45,18 @@ public class RoomTrigger : MonoBehaviour
     private IEnumerator BlockRoomBorders()
     {
         yield return new WaitForSeconds(1f);
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null) yield break;
+
+        Vector3Int playerCell = Vector3Int.FloorToInt(player.transform.position);
+        if (!roomBounds.Contains((Vector2Int)playerCell))
+        {
+            Debug.Log("Jugador salió de la sala antes de bloquear, no se cierran las puertas.");
+            yield break;
+        }
+
+        playerLockedIn = true;
         blockedTiles.Clear();
 
         Vector3Int[] directions = { Vector3Int.right, Vector3Int.left, Vector3Int.up, Vector3Int.down };
@@ -66,8 +79,8 @@ public class RoomTrigger : MonoBehaviour
                         if (!roomBounds.Contains((Vector2Int)neighbor) && System.Array.Exists(floorTiles, t => t == floorTilemap.GetTile(neighbor)))
                         {
                             floorTilemap.SetTile(tilePos, null);
-                            Debug.Log("Tile bloqueado en: " + tilePos + " con tile: " + wallTile?.name);
                             wallTilemap.SetTile(tilePos, wallTile);
+                            Debug.Log("Tile bloqueado en: " + tilePos + " con tile: " + wallTile?.name);
                             blockedTiles.Add(tilePos);
                             break;
                         }
@@ -92,4 +105,14 @@ public class RoomTrigger : MonoBehaviour
 
         FindObjectOfType<MapMaker>().CheckAllEnemiesDead();
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Vector3 center = new Vector3(roomBounds.center.x, roomBounds.center.y, 0f);
+        Vector3 size = new Vector3(roomBounds.size.x, roomBounds.size.y, 1f);
+        Gizmos.DrawWireCube(center, size);
+    }
+#endif
 }

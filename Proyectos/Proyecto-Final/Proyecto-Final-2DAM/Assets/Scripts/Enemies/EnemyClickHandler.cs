@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyClickHandler : MonoBehaviour
 {
-    public float damageAmount = 100000f;  // Daño que se aplicará al enemigo
+    public int damageAmount = 100000;  // Daño que se aplicará al enemigo
 
     void Update()
     {
@@ -20,7 +20,7 @@ public class EnemyClickHandler : MonoBehaviour
                 {
                     // Aplicar daño al enemigo
                     enemy.TakeDamage(damageAmount);
-                    Debug.Log("Enemigo tocado! Vida restante: " + enemy.health);
+                    Debug.Log("Enemigo tocado! Vida restante: " + enemy.currentHealth);
                 }
             }
         }

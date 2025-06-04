@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6574618677997410089
+--- !u!1 &2481753771284193787
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4612983765694925555}
-  - component: {fileID: 7101745436459999998}
-  - component: {fileID: 7886085932847200848}
-  - component: {fileID: 3904165437102543150}
+  - component: {fileID: 5752357499984583141}
+  - component: {fileID: 1898421431805958194}
+  - component: {fileID: 623017521936837218}
+  - component: {fileID: 9008557640618024235}
   m_Layer: 0
-  m_Name: Pocion
+  m_Name: Pocion_Invencible
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4612983765694925555
+--- !u!4 &5752357499984583141
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6574618677997410089}
+  m_GameObject: {fileID: 2481753771284193787}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.78, y: 0.07, z: 0}
+  m_LocalPosition: {x: -3.405, y: 0.077, z: 0}
   m_LocalScale: {x: 0.6862599, y: 0.69956654, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7101745436459999998
+--- !u!212 &1898421431805958194
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6574618677997410089}
+  m_GameObject: {fileID: 2481753771284193787}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -75,24 +75,24 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: 51afb59045900d14ea7f8475a1e2adcb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5dc8be2afc4c54a4dad7df5ae7e08461, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.15, y: 0.15}
+  m_Size: {x: 0.9375, y: 0.9375}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &7886085932847200848
+--- !u!61 &623017521936837218
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6574618677997410089}
+  m_GameObject: {fileID: 2481753771284193787}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -118,32 +118,33 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.027366847, y: -0.061208174}
+  m_Offset: {x: 0, y: -0.049221233}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.9375, y: 0.9375}
-    newSize: {x: 0.15, y: 0.15}
+    newSize: {x: 0.9375, y: 0.9375}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9922337, y: 1.0599164}
+  m_Size: {x: 0.9375, y: 1.0359424}
   m_EdgeRadius: 0
---- !u!114 &3904165437102543150
+--- !u!114 &9008557640618024235
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6574618677997410089}
+  m_GameObject: {fileID: 2481753771284193787}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 849d6684e288dfa4a8258a82515f28db, type: 3}
+  m_Script: {fileID: 11500000, guid: 17dff36b27b49fe458c0e8d93d45b737, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   floatAmplitude: 0.1
   floatFrequency: 1
-  healEffectPrefab: {fileID: 798804106132409553, guid: 7ef143f522a7963478fa3b1bd1674899, type: 3}
+  immortalityEffectPrefab: {fileID: 0}
   pickupSound: {fileID: 8300000, guid: dc82e3c66d62b5c4a8437500a0477f83, type: 3}
+  immortalityDuration: 5

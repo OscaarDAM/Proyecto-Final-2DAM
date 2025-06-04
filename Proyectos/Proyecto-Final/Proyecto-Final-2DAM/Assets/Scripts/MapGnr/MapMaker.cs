@@ -5,49 +5,35 @@ using UnityEngine.Tilemaps;
 
 public class MapMaker : MonoBehaviour
 {
-    // Tilemaps para el suelo, paredes y fondo
     public Tilemap floorTilemap;
     public Tilemap wallTilemap;
     public Tilemap backgroundTilemap;
 
-    // Tiles para el suelo, paredes y fondo
     public TileBase[] floorTiles;
     public TileBase[] wallTiles;
     public TileBase backgroundTile;
 
-    // Dimensiones del mapa
     public int mapWidth = 32;
     public int mapHeight = 32;
     private int[,] mapData;
 
-    // Referencia al generador de habitaciones
     public RoomGenerator roomGenerator;
 
-    // Prefabs para el jugador y los enemigos
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
 
     private TileBase currentWallTile;
-
-    // ✅ Lista global para todos los enemigos
     public List<EnemyFollow> allEnemies = new List<EnemyFollow>();
 
-    // Tile especial que se coloca al final
     public TileBase specialTile;
-
-    // Sonido para el tile especial
     public AudioClip specialTileSound;
     private AudioSource audioSource;
 
-    // Tile para limpiar paredes 
     public TileBase cleanWallTile;
     public float wallChangeDelay = 0.02f;
 
-
-
     void Start()
     {
-
         int currentLevel = PlayerPrefs.GetInt("Level", 1);
         Debug.Log("Nivel actual: " + currentLevel);
 
@@ -77,7 +63,7 @@ public class MapMaker : MonoBehaviour
         SpawnEnemies();
     }
 
-        void GenerateTiles(List<TileBase> floorPattern)
+    void GenerateTiles(List<TileBase> floorPattern)
     {
         floorTilemap.ClearAllTiles();
         wallTilemap.ClearAllTiles();
@@ -99,7 +85,6 @@ public class MapMaker : MonoBehaviour
                         wallTilemap.SetTile(pos, currentWallTile);
                         break;
                     default:
-                        // Rellenar huecos vacíos con tile de fondo
                         if (backgroundTile != null)
                             backgroundTilemap.SetTile(pos, backgroundTile);
                         break;
@@ -107,8 +92,6 @@ public class MapMaker : MonoBehaviour
             }
         }
     }
-
-
 
     void SpawnPlayer()
     {
@@ -155,8 +138,16 @@ public class MapMaker : MonoBehaviour
             roomTrigger.floorTiles = floorTiles;
             roomTrigger.roomEnemies = new List<EnemyFollow>();
 
-            // 🔥 Escala el número de enemigos por sala según el nivel
-            int enemyCount = Mathf.Min(2 + currentLevel, validPositions.Count);
+            // 👇 Aquí se define cuántos enemigos poner en esta sala
+            int enemyCount = 3; // Valor base
+
+            // 🎲 Aleatoriamente, en algunas salas, se añade un enemigo más
+            if (Random.value < 0.3f) // 30% de probabilidad
+            {
+                enemyCount += 1;
+            }
+
+            enemyCount = Mathf.Min(enemyCount, validPositions.Count);
 
             for (int i = 0; i < enemyCount; i++)
             {
@@ -167,6 +158,7 @@ public class MapMaker : MonoBehaviour
                 Vector3 spawnPos = new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0);
                 GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
 
+                // ✅ Usar GetComponentInChildren si EnemyFollow está en un hijo del prefab
                 EnemyFollow enemyScript = enemy.GetComponentInChildren<EnemyFollow>();
                 if (enemyScript != null)
                 {
@@ -174,6 +166,10 @@ public class MapMaker : MonoBehaviour
                         new Vector3(room.bounds.center.x, room.bounds.center.y, 0f),
                         new Vector3(room.bounds.size.x, room.bounds.size.y, 1f)
                     );
+
+                    // 📈 Escalar la vida máxima según el nivel
+                    enemyScript.maxHealth += currentLevel - 1;
+                    enemyScript.currentHealth = enemyScript.maxHealth;
 
                     roomTrigger.roomEnemies.Add(enemyScript);
                     allEnemies.Add(enemyScript);
@@ -218,33 +214,22 @@ public class MapMaker : MonoBehaviour
 
                 if (floorTilemap.GetTile(tilePos) != null && wallTilemap.GetTile(tilePos) == null)
                 {
-                    // Colocar tile especial
                     floorTilemap.SetTile(tilePos, specialTile);
 
-                    // Reproducir sonido
                     if (specialTileSound != null && audioSource != null)
-                    {
                         audioSource.PlayOneShot(specialTileSound);
-                    }
 
                     Debug.Log("Tile especial colocado en: " + tilePos);
 
-                    // Crear el GameObject trigger directamente desde código
                     GameObject triggerGO = new GameObject("NextLevelTrigger");
-
-                    // Posicionar en el centro del tile
                     Vector3 worldPos = floorTilemap.CellToWorld(tilePos) + new Vector3(0.5f, 0.5f, 0f);
                     triggerGO.transform.position = worldPos;
 
-                    // Añadir collider
                     BoxCollider2D col = triggerGO.AddComponent<BoxCollider2D>();
                     col.isTrigger = true;
-                    col.size = new Vector2(0.9f, 0.9f); // Opcional: ajusta tamaño si quieres
+                    col.size = new Vector2(0.9f, 0.9f);
 
-                    // Añadir el script que reinicia la escena
                     triggerGO.AddComponent<NextLevelTrigger>();
-
-                    // 🔁 Aquí va la llamada a la corutina
                     StartCoroutine(GradualWallTileChange());
                     break;
                 }
@@ -300,32 +285,6 @@ public class MapMaker : MonoBehaviour
 
     void RefreshWallColliders()
     {
-        /* TilemapCollider2D tileCol = wallTilemap.GetComponent<TilemapCollider2D>();
-         if (tileCol != null)
-         {
-             tileCol.enabled = false;
-             tileCol.enabled = true;
-         }
-
-         CompositeCollider2D compCol = wallTilemap.GetComponent<CompositeCollider2D>();
-         if (compCol != null)
-         {
-             compCol.geometryType = CompositeCollider2D.GeometryType.Polygons;
-             compCol.generationType = CompositeCollider2D.GenerationType.Synchronous;
-         }
-
-         Rigidbody2D rb = wallTilemap.GetComponent<Rigidbody2D>();
-         if (rb != null)
-         {
-             rb.simulated = false;
-             rb.simulated = true;
-         }
-
-         Debug.Log("Collider de paredes actualizado."); */
-        
         wallTilemap.CompressBounds();
-        
     }
-
-    
 }

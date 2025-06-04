@@ -5,7 +5,8 @@ public class EnemyFollow : MonoBehaviour
 {
     // Configuración general del enemigo
     public float speed = 0.5f;
-    public float health = 100f;
+    public int maxHealth = 5;
+    public int currentHealth = 5;
 
     private Transform player;
     private Rigidbody2D rb;
@@ -69,7 +70,7 @@ public class EnemyFollow : MonoBehaviour
         GameObject[] enemigos = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (GameObject enemigo in enemigos)
         {
-            enemigo.GetComponent<EnemyFollow>().TakeDamage(1000f);
+            enemigo.GetComponent<EnemyFollow>().TakeDamage(1000);
         }
     }
 
@@ -247,10 +248,10 @@ public class EnemyFollow : MonoBehaviour
     }
 
     // Recibir daño
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
-        health -= damage;
-        if (health <= 0)
+        currentHealth -= damage;
+        if (currentHealth <= 0)
         {
             KillEnemy();
         }

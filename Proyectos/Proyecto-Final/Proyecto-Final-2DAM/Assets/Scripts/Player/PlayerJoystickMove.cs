@@ -32,6 +32,12 @@ public class PlayerJoystickMove : MonoBehaviour
 
     public CameraShake cameraShake;
 
+    // 🟡 VARIABLES PARA INMORTALIDAD
+    private bool isImmortal = false;
+    private float immortalTimer = 0f;
+    private Coroutine immortalCoroutine;
+    private Coroutine blinkCoroutine;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -77,6 +83,20 @@ public class PlayerJoystickMove : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K)) health = 0;
         if (Input.GetKeyDown(KeyCode.J)) health--;
 
+        // 🟡 Timer de inmortalidad
+        if (isImmortal)
+        {
+            immortalTimer -= Time.deltaTime;
+            if (immortalTimer <= 0f)
+            {
+                isImmortal = false;
+
+                if (blinkCoroutine != null) StopCoroutine(blinkCoroutine);
+                spriteRenderer.enabled = true;
+                spriteRenderer.color = originalColor;
+            }
+        }
+
         if (health <= 0 && !isDead)
         {
             isDead = true;
@@ -117,6 +137,9 @@ public class PlayerJoystickMove : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Enemy"))
         {
+            // 🟡 No recibir daño si es inmortal
+            if (isImmortal) return;
+
             // Dirección del rebote (desde el enemigo hacia el jugador)
             bounceDirection = (rb.position - (Vector2)collision.transform.position).normalized;
             isBouncing = true;
@@ -151,12 +174,65 @@ public class PlayerJoystickMove : MonoBehaviour
     }
 
     // 🔴 Corrutina para poner al jugador rojo brevemente
-    private System.Collections.IEnumerator FlashRed()
+    private IEnumerator FlashRed()
     {
         spriteRenderer.color = new Color(1f, 0.3f, 0.3f); // Color rojizo
 
         yield return new WaitForSeconds(0.2f); // Duración del efecto
 
+        // Restaurar color solo si no está inmortal
+        if (!isImmortal)
+            spriteRenderer.color = originalColor;
+    }
+
+    // 🟡 Método público para hacer al jugador inmortal por un tiempo
+    public void BecomeImmortal(float duration)
+    {
+        isImmortal = true;
+        immortalTimer = duration;
+
+        // Cambiar a color amarillo brillante mientras es inmortal
+        spriteRenderer.color = new Color(1f, 1f, 0.3f);
+
+        // Reiniciar efecto si ya estaba activo
+        if (immortalCoroutine != null)
+            StopCoroutine(immortalCoroutine);
+        if (blinkCoroutine != null)
+            StopCoroutine(blinkCoroutine);
+
+        immortalCoroutine = StartCoroutine(ImmortalityEffect(duration));
+        blinkCoroutine = StartCoroutine(BlinkEffect());
+    }
+
+    // 🟡 Corrutina para terminar el estado inmortal después del tiempo
+    private IEnumerator ImmortalityEffect(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        isImmortal = false;
+
+        if (blinkCoroutine != null)
+            StopCoroutine(blinkCoroutine);
+
+        spriteRenderer.enabled = true;
         spriteRenderer.color = originalColor;
+    }
+
+    // 🟡 Efecto de parpadeo mientras es inmortal
+    private IEnumerator BlinkEffect()
+    {
+        while (isImmortal)
+        {
+            spriteRenderer.enabled = false;
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.enabled = true;
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    // 🟡 Puedes usar esto si necesitas consultar desde otro script
+    public bool IsImmortal()
+    {
+        return isImmortal;
     }
 }
