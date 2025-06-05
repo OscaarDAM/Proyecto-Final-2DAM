@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class EnemyProjectil : MonoBehaviour
+public class EnemyProjectile : MonoBehaviour
 {
     public int damage = 1;
 
     private void Start()
     {
         // Destruir automáticamente tras 2 segundos
-        Destroy(gameObject, 2f);
+        Destroy(gameObject, 10f);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

@@ -1,5 +1,10 @@
 using UnityEngine;
 
+    public interface IDamageable
+    {
+        void TakeDamage(int damage);
+    }
+
 public class PlayerCombat : MonoBehaviour
 {
     public Transform weaponHolder;
@@ -130,15 +135,13 @@ public class PlayerCombat : MonoBehaviour
 
         if (((1 << other.gameObject.layer) & enemyLayer) != 0)
         {
-            if (other.CompareTag("Enemy"))
+            IDamageable damageable = other.GetComponent<IDamageable>();
+            if (damageable != null)
             {
-                Debug.Log($"✅ Arma trigger hit: {other.name}");
-                var enemy = other.GetComponent<EnemyFollow>();
-                if (enemy != null)
-                {
-                    enemy.TakeDamage(damage);
-                }
+                damageable.TakeDamage(damage);
+                Debug.Log($"✅ Enemigo {other.name} recibió daño.");
             }
         }
     }
+
 }
