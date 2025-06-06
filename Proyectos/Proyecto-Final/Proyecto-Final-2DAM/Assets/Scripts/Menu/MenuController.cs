@@ -15,31 +15,34 @@ public class MenuController : MonoBehaviour
     public GameObject buttonSalir;
 
     [Header("Opciones")]
-    public GameObject opcionesPanel; // 🎛️ Panel que contiene sliders y botón de volver
+    public GameObject opcionesPanel; 
     public Slider sliderSonidos;
     public Slider sliderMusica;
     public Button botonVolver;
 
+    // 🔤 NUEVO: Referencias a los textos de los sliders
+    public TextMeshProUGUI textoSonidos;
+    public TextMeshProUGUI textoMusica;
+
     [Header("Audio")]
     public AudioClip sonidoBoton;
-    public AudioClip sonidoCamion; // 🎵 Sonido de camión arrancando
-    public AudioClip musicaFondo;  // 🎶 Música que suena nada más entrar
-    public AudioSource audioSourceSonidos; // 🔊 AudioSource para efectos
-    public AudioSource audioSourceMusica;  // 🎶 AudioSource para música
+    public AudioClip sonidoCamion;
+    public AudioClip musicaFondo;
+    public AudioSource audioSourceSonidos;
+    public AudioSource audioSourceMusica;
 
     [Header("Camión")]
-    public GameObject camion; // 🚚 Referencia al objeto del camión
-    public float distanciaMovimiento = 10f; // Cuánto se moverá el camión hacia la derecha
-    public float duracionMovimiento = 2f;   // Tiempo que tardará en moverse
-    public ParticleSystem humoCamion; // 🌫️ Sistema de partículas para el humo del camión
+    public GameObject camion;
+    public float distanciaMovimiento = 10f;
+    public float duracionMovimiento = 2f;
+    public ParticleSystem humoCamion;
 
     private bool hasTapped = false;
-    private bool animacionEnCurso = false; // 🔄 Para saber si la animación de inicio ya empezó
-    private string escenaDestinoPendiente = ""; // 🎯 Escena que se debe cargar si se salta
+    private bool animacionEnCurso = false;
+    private string escenaDestinoPendiente = "";
 
     void Awake()
     {
-        // Configurar audios si no se asignaron
         if (audioSourceSonidos == null)
             audioSourceSonidos = gameObject.AddComponent<AudioSource>();
         if (audioSourceMusica == null)
@@ -48,21 +51,22 @@ public class MenuController : MonoBehaviour
 
     void Start()
     {
-        // Oculta todo excepto el "Pulsa aquí"
         title.SetActive(false);
         buttonJugar.SetActive(false);
         buttonOpciones.SetActive(false);
-        buttonSalir.SetActive(false);
         buttonCreditos.SetActive(false);
-        opcionesPanel.SetActive(false); // Ocultar menú de opciones al inicio
+        buttonSalir.SetActive(false);
+        opcionesPanel.SetActive(false);
 
-        // 🎶 Reproducir música al entrar
+        // ❌ Ocultar textos de sliders al inicio
+        if (textoSonidos != null) textoSonidos.gameObject.SetActive(false);
+        if (textoMusica != null) textoMusica.gameObject.SetActive(false);
+
         if (musicaFondo != null)
         {
             audioSourceMusica.clip = musicaFondo;
             audioSourceMusica.loop = true;
 
-            // ✅ Cargar volumen guardado para música
             float volMusica = PlayerPrefs.GetFloat("VolumenMusica", 0.5f);
             audioSourceMusica.volume = volMusica;
             sliderMusica.value = volMusica;
@@ -70,12 +74,10 @@ public class MenuController : MonoBehaviour
             audioSourceMusica.Play();
         }
 
-        // ✅ Cargar volumen guardado para sonidos
         float volSonidos = PlayerPrefs.GetFloat("VolumenSonidos", 0.5f);
         audioSourceSonidos.volume = volSonidos;
         sliderSonidos.value = volSonidos;
 
-        // Añadir listeners
         sliderSonidos.onValueChanged.AddListener(ActualizarVolumenSonidos);
         sliderMusica.onValueChanged.AddListener(ActualizarVolumenMusica);
         botonVolver.onClick.AddListener(CerrarOpciones);
@@ -97,7 +99,6 @@ public class MenuController : MonoBehaviour
         }
         else if (animacionEnCurso && Input.GetMouseButtonDown(0))
         {
-            // ⏩ Si se hace clic durante la animación del camión, saltar directamente a la escena
             TransicionEscenasUI.Instance.DisolverSalida(() =>
             {
                 PlayerPrefs.SetInt("Level", 1);
@@ -168,50 +169,41 @@ public class MenuController : MonoBehaviour
         Application.Quit();
     }
 
-    // 🟢 Nuevo método que se llama desde el botón "Jugar"
     public void IniciarJuego(string nombreEscena)
     {
         StartCoroutine(SecuenciaInicioJuego(nombreEscena));
     }
 
-    // ⏱️ Corrutina que maneja la secuencia: sonido, ocultar UI, mover camión, cambiar de escena
     private IEnumerator SecuenciaInicioJuego(string nombreEscena)
     {
-        animacionEnCurso = true; // 🔁 Marcar que está en curso
+        animacionEnCurso = true;
         escenaDestinoPendiente = nombreEscena;
 
         ReproducirSonidoCamion();
 
-        // 🔻 Ocultar elementos con fade usando LeanTween
         OcultarElemento(title);
         OcultarElemento(buttonJugar);
         OcultarElemento(buttonOpciones);
         OcultarElemento(buttonCreditos);
         OcultarElemento(buttonSalir);
 
-        // ⏳ Esperar 6 segundos antes de mover el camión
         yield return new WaitForSeconds(6f);
 
-        // 🌫️ Activar humo del camión
         if (humoCamion != null)
         {
             humoCamion.Play();
         }
 
-        // 🚚 Mover el camión hacia la derecha
         Vector3 destino = camion.transform.position + Vector3.right * distanciaMovimiento;
         LeanTween.move(camion, destino, duracionMovimiento).setEase(LeanTweenType.easeInOutSine);
 
-        // ⌛ Esperar a que termine el movimiento
         yield return new WaitForSeconds(duracionMovimiento);
 
-        // ⛔ Detener humo (opcional)
         if (humoCamion != null)
         {
             humoCamion.Stop();
         }
 
-        // 🔁 Transición final a la nueva escena
         TransicionEscenasUI.Instance.DisolverSalida(() =>
         {
             PlayerPrefs.SetInt("Level", 1);
@@ -219,7 +211,6 @@ public class MenuController : MonoBehaviour
         });
     }
 
-    // 🔻 Ocultar cualquier GameObject con CanvasGroup usando LeanTween
     private void OcultarElemento(GameObject elemento)
     {
         CanvasGroup cg = elemento.GetComponent<CanvasGroup>();
@@ -230,19 +221,21 @@ public class MenuController : MonoBehaviour
         }
     }
 
-    // ⚙️ MÉTODOS DE OPCIONES
+    // 📂 Abrir menú de opciones
     public void AbrirOpciones()
     {
         ReproducirSonido();
 
-        // Ocultar botones
         buttonJugar.SetActive(false);
         buttonOpciones.SetActive(false);
         buttonCreditos.SetActive(false);
         buttonSalir.SetActive(false);
 
-        // Mostrar panel de opciones
         opcionesPanel.SetActive(true);
+
+        // ✅ Mostrar los textos junto con los sliders
+        if (textoSonidos != null) textoSonidos.gameObject.SetActive(true);
+        if (textoMusica != null) textoMusica.gameObject.SetActive(true);
     }
 
     private void CerrarOpciones()
@@ -251,7 +244,10 @@ public class MenuController : MonoBehaviour
 
         opcionesPanel.SetActive(false);
 
-        // Mostrar botones de nuevo
+        // ❌ Ocultar textos
+        if (textoSonidos != null) textoSonidos.gameObject.SetActive(false);
+        if (textoMusica != null) textoMusica.gameObject.SetActive(false);
+
         buttonJugar.SetActive(true);
         buttonOpciones.SetActive(true);
         buttonCreditos.SetActive(true);
@@ -261,14 +257,14 @@ public class MenuController : MonoBehaviour
     private void ActualizarVolumenSonidos(float valor)
     {
         audioSourceSonidos.volume = valor;
-        PlayerPrefs.SetFloat("VolumenSonidos", valor); // ✅ Guardar
+        PlayerPrefs.SetFloat("VolumenSonidos", valor);
         PlayerPrefs.Save();
     }
 
     private void ActualizarVolumenMusica(float valor)
     {
         audioSourceMusica.volume = valor;
-        PlayerPrefs.SetFloat("VolumenMusica", valor); // ✅ Guardar
+        PlayerPrefs.SetFloat("VolumenMusica", valor);
         PlayerPrefs.Save();
     }
 }
